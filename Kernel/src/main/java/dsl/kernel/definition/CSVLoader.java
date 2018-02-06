@@ -27,6 +27,9 @@ public class CSVLoader extends Comportement {
         dataSource = new ArrayList<>();
         this.pathCSV = pathCSV;
         this.nameCapteur = nameCapteur;
+        if (pathCSV != null) {
+            getDataCSV();
+        }
     }
 
     public CSVLoader(String pathCSV, String nameCapteur, int timeMin, int timeMax) {
@@ -35,6 +38,10 @@ public class CSVLoader extends Comportement {
         this.nameCapteur = nameCapteur;
         this.timeMax = timeMax;
         this.timeMin = timeMin;
+        if (pathCSV != null) {
+            getDataCSV();
+        }
+
     }
 
     public void getDataCSV() {
@@ -68,10 +75,15 @@ public class CSVLoader extends Comportement {
     }
 
     @Override
-    public List<Tuple> createData() {
-        if (pathCSV != null) {
-            getDataCSV();
+    public String createData(int instantT) {
+        String result = null;
+        if(!dataSource.isEmpty())
+        {
+            for(Tuple d : dataSource)
+            {
+                //if(d.)
+            }
         }
-        return dataSource;
+        return result;
     }
 }

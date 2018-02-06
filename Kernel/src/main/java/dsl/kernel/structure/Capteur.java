@@ -15,6 +15,14 @@ public class Capteur implements NamedElement {
 
     private String name;
     private Comportement loi;
+    private int echantillonnage;
+    private String lastValue = null;
+
+    public Capteur(String name, Comportement loi, int echantillonnage) {
+        this.name = name;
+        this.loi = loi;
+        this.echantillonnage = echantillonnage;
+    }
 
     @Override
     public void setName(String name) {
@@ -40,8 +48,28 @@ public class Capteur implements NamedElement {
         this.loi = loi;
     }
 
-    public List<Tuple> ggenerationDonnees() {
-        return loi.createData();
+    public String generationDonnees(int instantT) {
+        if (instantT % echantillonnage == 0) {
+            String temp = loi.createData(instantT);
+            lastValue = temp;
+            return temp;
+        } else {
+            return lastValue;
+        }
+    }
+
+    /**
+     * @return the echantillonnage
+     */
+    public int getEchantillonnage() {
+        return echantillonnage;
+    }
+
+    /**
+     * @param echantillonnage the echantillonnage to set
+     */
+    public void setEchantillonnage(int echantillonnage) {
+        this.echantillonnage = echantillonnage;
     }
 
 }

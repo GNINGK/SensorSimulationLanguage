@@ -7,5 +7,6 @@ import java.util.List;
  * @author Maxime
  */
 public abstract class Comportement {
-    public abstract List<Tuple> createData();
+    
+    public abstract String createData(int instantT);
 }

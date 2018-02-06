@@ -1,6 +1,7 @@
 package dsl.kernel.structure;
 
 import dsl.kernel.NamedElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,11 @@ public class Lieu implements NamedElement {
 
     private String name;
     private List<Capteur> capteurs;
+    
+    public Lieu()
+    {
+        capteurs = new ArrayList<>();
+    }
 
     @Override
     public void setName(String name) {

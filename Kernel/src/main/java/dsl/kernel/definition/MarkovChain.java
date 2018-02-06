@@ -14,8 +14,8 @@ import java.util.List;
 public class MarkovChain extends Comportement {
 
     @Override
-    public List<Tuple> createData() {
+    public String createData(int instantT) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

@@ -10,6 +10,7 @@ import dsl.kernel.structure.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,12 @@ public class Simulation implements NamedElement {
 
     private String name;
     private List<Lieu> lieux;
+    private int tempsTotalSimulation;
+
+    public Simulation(int tempsTotalSimulation) {
+        this.tempsTotalSimulation = tempsTotalSimulation;
+        lieux = new ArrayList<>();
+    }
 
     @Override
     public void setName(String name) {
@@ -38,7 +45,7 @@ public class Simulation implements NamedElement {
         return lieux;
     }
 
-    public Lieu getLieu(String name) {
+    public Lieu getLieuByName(String name) {
         Lieu result = null;
         for (Lieu l : lieux) {
             if (l.getName().equals(name)) {
@@ -58,11 +65,19 @@ public class Simulation implements NamedElement {
     public void run() {
         for (Lieu l : lieux) {
             List<Capteur> listCapteur = l.getCapteurs();
-            List<Tuple> resultat = null;
+            //List<Tuple> resultat = new ArrayList<>();
+            System.out.println("Lieu : " + l.getName());
             for (Capteur c : listCapteur) {
-
+                System.out.println("capteur : " + c.getName());
+                for (int i = 0; i < tempsTotalSimulation; i++) {
+                    if(i%c.getEchantillonnage()==0)
+                    {
+                        System.out.println(c.generationDonnees(i));
+                    }
+                    
+                }
             }
-            sauvegardeCSV(resultat, "");
+            //sauvegardeCSV(resultat, "");
         }
     }
 
@@ -92,5 +107,12 @@ public class Simulation implements NamedElement {
         } catch (IOException e) {
             System.out.println("Erreur: impossible de créer le fichier '" + pathOutput + "'");
         }
+    }
+
+    /**
+     * @return the tempsTotalSimulation
+     */
+    public int getTempsTotalSimulation() {
+        return tempsTotalSimulation;
     }
 }
