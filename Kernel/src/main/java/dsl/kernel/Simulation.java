@@ -1,8 +1,8 @@
 package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Tuple;
-import main.java.dsl.kernel.structure.Sensor;
 import main.java.dsl.kernel.structure.Place;
+import main.java.dsl.kernel.structure.Sensor;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
