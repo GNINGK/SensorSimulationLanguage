@@ -48,7 +48,7 @@ public class Place implements NamedElement {
         sensors.add(cap);
     }
 
-    public void addSensor(List<Sensor> cap) {
+    public void addSensors(List<Sensor> cap) {
         sensors.addAll(cap);
     }
 

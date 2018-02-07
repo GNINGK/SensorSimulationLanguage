@@ -5,11 +5,11 @@ package main.java.dsl.kernel.definition;
  */
 public class Tuple {
 
-    private int time;
-    private String value;
+    private long time;
+    private float value;
     private String sensor;
 
-    public Tuple(int time, String sensor, String value) {
+    public Tuple(long time, String sensor, float value) {
         this.time = time;
         this.value = value;
         this.sensor = sensor;
@@ -23,28 +23,28 @@ public class Tuple {
     /**
      * @return the time
      */
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
     /**
      * @param time the time to set
      */
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
     /**
      * @return the value
      */
-    public String getValue() {
+    public float getValue() {
         return value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(String value) {
+    public void setValue(float value) {
         this.value = value;
     }
 

@@ -5,5 +5,5 @@ package main.java.dsl.kernel.definition;
  */
 public abstract class Comportement {
 
-    public abstract String createData(int instantT);
+    public abstract float createData(int relativeTime);
 }

@@ -6,23 +6,28 @@ package main.java.dsl.kernel.definition;
 public class Functions extends Comportement {
 
     private double[] polynome;
+    private double xMax;
 
-    public Functions(double[] polynome) {
+    public Functions(double[] polynome, double xMax) {
         this.polynome = polynome;
+        this.xMax = xMax;
     }
 
     @Override
-    public String createData(int instantT) {
-        double result = 0;
+    public float createData(int relativeTime) {
+        float result = 0;
         for (int i = 0; i < polynome.length; i++) {
             if (i == 0) {
                 result += polynome[i];
             } else {
-                result += polynome[i] * Math.pow(instantT, i - 1);
+                if (polynome[i] == 0) {
+                    result = (float) Math.pow(relativeTime % xMax, i);
+                } else {
+                    result += polynome[i] * Math.pow(relativeTime % xMax, i);
+                }
             }
-
         }
-        return "" + result;
+        return result;
     }
 
 }

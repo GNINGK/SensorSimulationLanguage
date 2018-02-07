@@ -19,8 +19,8 @@ public class CSVLoader extends Comportement {
     List<Tuple> dataSource;
     String pathCSV;
     String sensorName;
-    int timeMin = -1;
-    int timeMax = -1;
+    long timeMin = -1;
+    long timeMax = -1;
 
     public CSVLoader(String pathCSV, String sensorName) {
         dataSource = new ArrayList<>();
@@ -55,7 +55,7 @@ public class CSVLoader extends Comportement {
                 tuple = line.split(",");
                 int time = Integer.parseInt(tuple[0]);
                 String sensor = tuple[1].replaceAll("\"", "");
-                String value = tuple[2].replaceAll("\"", "");
+                float value = Float.parseFloat(tuple[2].replaceAll("\"", ""));
                 if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
                     Tuple t = new Tuple(time, sensor, value);
                     dataSource.add(t);
@@ -74,8 +74,8 @@ public class CSVLoader extends Comportement {
     }
 
     @Override
-    public String createData(int instantT) {
-        String result = null;
+    public float createData(int relativeTime) {
+        float result = 0;
         if (!dataSource.isEmpty()) {
             for (Tuple d : dataSource) {
                 //if(d.)

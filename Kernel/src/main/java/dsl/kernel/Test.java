@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Comportement;
 import main.java.dsl.kernel.definition.Functions;
-import main.java.dsl.kernel.structure.Sensor;
 import main.java.dsl.kernel.structure.Place;
+import main.java.dsl.kernel.structure.Sensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,27 +13,20 @@ import java.util.List;
  */
 public class Test {
 
-    int tempsTotal;
-    static Comportement csvLoader;
-    static Comportement functions;
-    static Simulation simu;
-    static Place batA;
-
     public static void main(String[] args) {
-        //csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
-        double[] polynome = {1.0, 4.0, 6.0};
-        functions = new Functions(polynome);
+        double[] polynome = {0, 2, -1.0 / 5.0};
+        Comportement functions = new Functions(polynome, 10);
 
-        simu = new Simulation(5);
-        batA = new Place();
+        Simulation simu = new Simulation(100);
+        Place batA = new Place();
         batA.setName("batA");
 
         List<Sensor> listC = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            listC.add(new Sensor("sensor" + i, functions, 2));
+            listC.add(new Sensor("sensor" + i, functions, 1));
         }
 
-        batA.addSensor(listC);
+        batA.addSensors(listC);
         simu.setPlaces(batA);
 
         simu.run();

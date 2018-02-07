@@ -14,7 +14,7 @@ public class Sensor implements NamedElement {
     private String name;
     private Comportement loi;
     private int echantillonnage;
-    private String lastValue = null;
+    private float lastValue;
 
     public Sensor(String name, Comportement loi, int echantillonnage) {
         this.name = name;
@@ -46,9 +46,9 @@ public class Sensor implements NamedElement {
         this.loi = loi;
     }
 
-    public String generationDonnees(int instantT) {
-        if (instantT % echantillonnage == 0) {
-            String temp = loi.createData(instantT);
+    public float generationDonnees(int relativeTime) {
+        if (relativeTime % echantillonnage == 0) {
+            float temp = loi.createData(relativeTime);
             lastValue = temp;
             return temp;
         } else {

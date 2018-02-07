@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Tuple;
@@ -10,12 +5,17 @@ import main.java.dsl.kernel.structure.Place;
 import main.java.dsl.kernel.structure.Sensor;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Pong;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -25,15 +25,18 @@ public class Simulation implements NamedElement {
 
     private static final Logger LOGGER = Logger.getLogger(Simulation.class);
 
+    private InfluxDB influxDB;
+
     private String name;
     private List<Place> places;
-    private int tempsTotalSimulation;
+    private int totalTime;
 
-    Simulation(int tempsTotalSimulation) {
+    Simulation(int totalTime) {
         BasicConfigurator.configure();
+        initDB("http://192.168.99.100:8086", "sensors_database");
 
-        this.tempsTotalSimulation = tempsTotalSimulation;
-        places = new ArrayList<>();
+        this.totalTime = totalTime;
+        this.places = new ArrayList<>();
     }
 
     @Override
@@ -70,26 +73,29 @@ public class Simulation implements NamedElement {
         this.places.add(places);
     }
 
-    public void run() {
-        for (Place l : places) {
-            List<Sensor> listSensor = l.getSensors();
-            List<Tuple> resultat = new ArrayList<>();
-            LOGGER.info("Place : " + l.getName());
-            for (Sensor c : listSensor) {
-                LOGGER.info("capteur : " + c.getName());
+    /**
+     * @return totalTime
+     */
+    public int getTotalTime() {
+        return this.totalTime;
+    }
 
-                for (int i = 0; i < tempsTotalSimulation; i++) {
-                    if (i % c.getEchantillonnage() == 0) {
-                        LOGGER.info(c.generationDonnees(i));
-                        resultat.add(new Tuple(i, c.getName(), c.generationDonnees(i)));
+
+    public void run() {
+        for (Place l : this.places) {
+            List<Sensor> sensors = l.getSensors();
+            for (Sensor sensor : sensors) {
+                for (int i = 0; i < this.totalTime; i++) {
+                    if (i % sensor.getEchantillonnage() == 0) {
+                        long t = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
+                        saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
                     }
                 }
             }
-            sauvegardeCSV(resultat, "resultat.csv");
         }
     }
 
-    private void sauvegardeCSV(List<Tuple> resultat, String pathOutput) {
+    private void saveToCSV(List<Tuple> resultat, String pathOutput) {
         if (pathOutput.isEmpty()) {
             LOGGER.error("Attention : Il n'y a pas de chemin pour le fichier");
             return;
@@ -123,10 +129,21 @@ public class Simulation implements NamedElement {
         }
     }
 
-    /**
-     * @return the tempsTotalSimulation
-     */
-    public int getTempsTotalSimulation() {
-        return tempsTotalSimulation;
+    private void saveToDB(Tuple tuple) {
+        influxDB.write(Point.measurement(tuple.getSensor())
+                .time(tuple.getTime(), TimeUnit.MILLISECONDS)
+                .addField("value", tuple.getValue())
+                .build());
+    }
+
+    private void initDB(String dbLink, String dbName) {
+        this.influxDB = InfluxDBFactory.connect(dbLink);
+        Pong response = this.influxDB.ping();
+        if (response.getVersion().equalsIgnoreCase("unknown")) {
+            LOGGER.error("Error pinging server.");
+            return;
+        }
+        influxDB.createDatabase(dbName);
+        influxDB.setDatabase(dbName);
     }
 }

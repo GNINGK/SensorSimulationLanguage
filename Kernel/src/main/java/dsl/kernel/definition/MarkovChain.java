@@ -13,18 +13,18 @@ public class MarkovChain extends Comportement {
     private float[][] transitionMatrix;
     private int frequence;
     int state;//etat actuelle
-    String[] nameState;
-            
-    public MarkovChain(int nbEtat, int etatInitial, String[] nameState) {
+    float[] nameState;
+
+    public MarkovChain(int nbEtat, int etatInitial, float[] nameState) {
         transitionMatrix = new float[nbEtat][nbEtat];
         this.state = etatInitial;
         this.nameState = nameState;
     }
 
     @Override
-    public String createData(int instantT) {
-        String result = null;
-        if (instantT % frequence == 0) {
+    public float createData(int relativeTime) {
+        float result = 0;
+        if (relativeTime % frequence == 0) {
             double r = Math.random();
             double sum = 0.0;
 
