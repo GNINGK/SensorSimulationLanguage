@@ -1,17 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package main.java.dsl.kernel.definition;
 
 /**
- * @author user
+ *
+ * @author Maxime
  */
-public class Functions extends Behavior {
-
-    private double[] polynome;
-
-    public Functions(double[] polynome) {
+public class Polynomial extends Functions{
+    
+        private double[] polynome;
+    public Polynomial(double[] polynome) {
         this.polynome = polynome;
     }
-
-    @Override
+    
+        @Override
     public String createData(int instantT) {
         double result = 0;
         for (int i = 0; i < polynome.length; i++) {
@@ -24,5 +29,5 @@ public class Functions extends Behavior {
         }
         return "" + result;
     }
-
+    
 }

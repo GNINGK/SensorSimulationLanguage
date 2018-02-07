@@ -21,6 +21,7 @@ public class CSVLoader extends Behavior {
     String sensorName;
     int timeMin = -1;
     int timeMax = -1;
+    String lastValue = null;
 
     public CSVLoader(String pathCSV, String sensorName) {
         dataSource = new ArrayList<>();

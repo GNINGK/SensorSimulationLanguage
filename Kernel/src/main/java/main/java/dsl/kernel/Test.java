@@ -27,7 +27,7 @@ public class Test {
     public static void main(String[] args) {
         //csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
         double[] polynome = {1.0, 4.0, 6.0};
-        functions = new Functions(polynome);
+        //functions = new Functions(polynome);
 
         simu = new Simulation(5);
         batA = new Place();
@@ -35,7 +35,7 @@ public class Test {
 
         List<Sensor> listC = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            listC.add(new Sensor("sensor" + i, functions, 2));
+           // listC.add(new Sensor("sensor" + i, functions, 2));
         }
 
         batA.addSensor(listC);
