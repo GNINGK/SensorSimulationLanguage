@@ -1,9 +1,7 @@
-package dsl.kernel.structure;
+package main.java.dsl.kernel.structure;
 
-import dsl.kernel.NamedElement;
-import dsl.kernel.definition.Comportement;
-import dsl.kernel.definition.Tuple;
-import java.util.List;
+import main.java.dsl.kernel.NamedElement;
+import main.java.dsl.kernel.definition.Comportement;
 
 /**
  * Cette classe représente un ensemble (1 a n) de capteurs qui utiliseront la

@@ -1,20 +1,19 @@
-package dsl.kernel.structure;
+package main.java.dsl.kernel.structure;
 
-import dsl.kernel.NamedElement;
+import main.java.dsl.kernel.NamedElement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Maxime
  */
 public class Lieu implements NamedElement {
 
     private String name;
     private List<Capteur> capteurs;
-    
-    public Lieu()
-    {
+
+    public Lieu() {
         capteurs = new ArrayList<>();
     }
 
@@ -34,14 +33,11 @@ public class Lieu implements NamedElement {
     public List<Capteur> getCapteurs() {
         return capteurs;
     }
-    
-    public Capteur getCapteurByName(String name)
-    {
+
+    public Capteur getCapteurByName(String name) {
         Capteur result = null;
-        for(Capteur c : capteurs)
-        {
-            if(c.getName().equals(name))
-            {
+        for (Capteur c : capteurs) {
+            if (c.getName().equals(name)) {
                 result = c;
             }
         }

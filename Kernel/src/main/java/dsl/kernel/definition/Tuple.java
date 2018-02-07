@@ -1,9 +1,6 @@
-package dsl.kernel.definition;
-
-import java.util.Date;
+package main.java.dsl.kernel.definition;
 
 /**
- *
  * @author Maxime
  */
 public class Tuple {
@@ -19,10 +16,10 @@ public class Tuple {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return time + "," + sensor + "," + value;
     }
+
     /**
      * @return the time
      */

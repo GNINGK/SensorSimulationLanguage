@@ -3,12 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dsl.kernel.definition;
-
-import java.util.List;
+package main.java.dsl.kernel.definition;
 
 /**
- *
  * @author user
  */
 public class MarkovChain extends Comportement {

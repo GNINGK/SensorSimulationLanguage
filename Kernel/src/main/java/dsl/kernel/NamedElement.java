@@ -1,4 +1,4 @@
-package dsl.kernel;
+package main.java.dsl.kernel;
 
 /**
  *

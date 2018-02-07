@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dsl.kernel;
+package main.java.dsl.kernel;
 
-import dsl.kernel.definition.Tuple;
-import dsl.kernel.structure.*;
+import main.java.dsl.kernel.definition.Tuple;
+import main.java.dsl.kernel.structure.Capteur;
+import main.java.dsl.kernel.structure.Lieu;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Maxime
  */
 public class Simulation implements NamedElement {
@@ -70,11 +71,10 @@ public class Simulation implements NamedElement {
             for (Capteur c : listCapteur) {
                 System.out.println("capteur : " + c.getName());
                 for (int i = 0; i < tempsTotalSimulation; i++) {
-                    if(i%c.getEchantillonnage()==0)
-                    {
+                    if (i % c.getEchantillonnage() == 0) {
                         System.out.println(c.generationDonnees(i));
                     }
-                    
+
                 }
             }
             //sauvegardeCSV(resultat, "");
@@ -88,11 +88,13 @@ public class Simulation implements NamedElement {
         } else {
             file = new File(pathOutput);
         }
+
+        FileWriter writer;
         try {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileWriter writer = new FileWriter(file);
+            writer = new FileWriter(file);
             for (int i = 0; i < resultat.size(); i++) {
                 if (i == resultat.size() - 1) {
                     String res = resultat.get(i).toString();

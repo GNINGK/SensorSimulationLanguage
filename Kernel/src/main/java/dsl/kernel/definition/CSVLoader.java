@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dsl.kernel.definition;
+package main.java.dsl.kernel.definition;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Maxime
  */
 public class CSVLoader extends Comportement {
@@ -77,10 +76,8 @@ public class CSVLoader extends Comportement {
     @Override
     public String createData(int instantT) {
         String result = null;
-        if(!dataSource.isEmpty())
-        {
-            for(Tuple d : dataSource)
-            {
+        if (!dataSource.isEmpty()) {
+            for (Tuple d : dataSource) {
                 //if(d.)
             }
         }
