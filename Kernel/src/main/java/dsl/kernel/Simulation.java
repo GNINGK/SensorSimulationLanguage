@@ -6,8 +6,8 @@
 package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Tuple;
-import main.java.dsl.kernel.structure.Place;
 import main.java.dsl.kernel.structure.Sensor;
+import main.java.dsl.kernel.structure.Place;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -27,12 +27,12 @@ public class Simulation implements NamedElement {
 
     private String name;
     private List<Place> places;
-    private int tempsTotalSimulation;
+    private int simulationTotalTime;
 
     Simulation(int tempsTotalSimulation) {
         BasicConfigurator.configure();
 
-        this.tempsTotalSimulation = tempsTotalSimulation;
+        this.simulationTotalTime = tempsTotalSimulation;
         places = new ArrayList<>();
     }
 
@@ -66,36 +66,36 @@ public class Simulation implements NamedElement {
     /**
      * @param places the places to set
      */
-    public void setPlaces(Place places) {
+    public void addPlaces(Place places) {
         this.places.add(places);
     }
 
     public void run() {
         for (Place l : places) {
-            List<Sensor> listSensor = l.getSensors();
+            List<Sensor> listCapteur = l.getSensors();
             List<Tuple> resultat = new ArrayList<>();
             LOGGER.info("Place : " + l.getName());
-            for (Sensor c : listSensor) {
+            for (Sensor c : listCapteur) {
                 LOGGER.info("capteur : " + c.getName());
 
-                for (int i = 0; i < tempsTotalSimulation; i++) {
+                for (int i = 0; i < simulationTotalTime; i++) {
                     if (i % c.getEchantillonnage() == 0) {
                         LOGGER.info(c.generationDonnees(i));
                         resultat.add(new Tuple(i, c.getName(), c.generationDonnees(i)));
                     }
                 }
             }
-            sauvegardeCSV(resultat, "resultat.csv");
+            saveCSV(resultat, "resultat.csv");
         }
     }
 
-    private void sauvegardeCSV(List<Tuple> resultat, String pathOutput) {
-        if (pathOutput.isEmpty()) {
+    private void saveCSV(List<Tuple> results, String outputPath) {
+        if (outputPath.isEmpty()) {
             LOGGER.error("Attention : Il n'y a pas de chemin pour le fichier");
             return;
         }
 
-        File file = new File(pathOutput);
+        File file = new File(outputPath);
 
         if (!file.exists()) {
             try {
@@ -108,25 +108,25 @@ public class Simulation implements NamedElement {
         }
 
         try (FileWriter writer = new FileWriter(file)) {
-            for (int i = 0; i < resultat.size(); i++) {
-                if (i == resultat.size() - 1) {
-                    String res = resultat.get(i).toString();
+            for (int i = 0; i < results.size(); i++) {
+                if (i == results.size() - 1) {
+                    String res = results.get(i).toString();
                     writer.write(res);
                 } else {
-                    String res = resultat.get(i).toString() + "\n";
+                    String res = results.get(i).toString() + "\n";
                     writer.write(res);
                 }
             }
             writer.flush();
         } catch (IOException e) {
-            LOGGER.error("Erreur: impossible de créer le fichier '" + pathOutput + "'");
+            LOGGER.error("Erreur: impossible de créer le fichier '" + outputPath + "'");
         }
     }
 
     /**
-     * @return the tempsTotalSimulation
+     * @return the simulationTotalTime
      */
-    public int getTempsTotalSimulation() {
-        return tempsTotalSimulation;
+    public int getSimulationTotalTime() {
+        return simulationTotalTime;
     }
 }

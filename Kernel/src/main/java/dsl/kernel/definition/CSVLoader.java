@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Maxime
  */
-public class CSVLoader extends Comportement {
+public class CSVLoader extends Behavior {
 
     List<Tuple> dataSource;
     String pathCSV;

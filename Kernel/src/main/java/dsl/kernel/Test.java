@@ -5,9 +5,9 @@
  */
 package main.java.dsl.kernel;
 
-import main.java.dsl.kernel.definition.Comportement;
-import main.java.dsl.kernel.definition.Functions;
 import main.java.dsl.kernel.structure.Sensor;
+import main.java.dsl.kernel.definition.Behavior;
+import main.java.dsl.kernel.definition.Functions;
 import main.java.dsl.kernel.structure.Place;
 
 import java.util.ArrayList;
@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class Test {
 
-    int tempsTotal;
-    static Comportement csvLoader;
-    static Comportement functions;
+    int simulationTotalTime;
+    static Behavior csvLoader;
+    static Behavior functions;
     static Simulation simu;
     static Place batA;
 
@@ -39,7 +39,7 @@ public class Test {
         }
 
         batA.addSensor(listC);
-        simu.setPlaces(batA);
+        simu.addPlaces(batA);
 
         simu.run();
     }

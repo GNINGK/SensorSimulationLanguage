@@ -3,7 +3,7 @@ package main.java.dsl.kernel.definition;
 /**
  * @author user
  */
-public class Functions extends Comportement {
+public class Functions extends Behavior {
 
     private double[] polynome;
 
