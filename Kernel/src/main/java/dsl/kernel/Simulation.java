@@ -81,20 +81,17 @@ public class Simulation implements NamedElement {
         }
     }
 
-    private void sauvegardeCSV(List<Tuple> resultat, String pathOutput) {
+    private void sauvegardeCSV(List<Tuple> resultat, String pathOutput) throws IOException {
         File file = null;
         if (pathOutput.isEmpty()) {
             System.out.println("Erreur : Il n'y a pas de chemin pour le fichier");
         } else {
             file = new File(pathOutput);
         }
-
-        FileWriter writer;
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            writer = new FileWriter(file);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        try (FileWriter writer = new FileWriter(file)) {
             for (int i = 0; i < resultat.size(); i++) {
                 if (i == resultat.size() - 1) {
                     String res = resultat.get(i).toString();
@@ -105,7 +102,6 @@ public class Simulation implements NamedElement {
                 }
             }
             writer.flush();
-            writer.close();
         } catch (IOException e) {
             System.out.println("Erreur: impossible de créer le fichier '" + pathOutput + "'");
         }
