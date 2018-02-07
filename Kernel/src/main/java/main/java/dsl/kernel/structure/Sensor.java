@@ -1,24 +1,24 @@
 package main.java.dsl.kernel.structure;
 
 import main.java.dsl.kernel.NamedElement;
-import main.java.dsl.kernel.definition.Comportement;
+import main.java.dsl.kernel.definition.Behavior;
 
 /**
  * Cette classe représente un ensemble (1 a n) de capteurs qui utiliseront la
- * même loi.
+ * même law.
  *
  * @author Maxime
  */
 public class Sensor implements NamedElement {
 
     private String name;
-    private Comportement loi;
+    private Behavior law;
     private int echantillonnage;
     private float lastValue;
 
-    public Sensor(String name, Comportement loi, int echantillonnage) {
+    public Sensor(String name, Behavior law, int echantillonnage) {
         this.name = name;
-        this.loi = loi;
+        this.law = law;
         this.echantillonnage = echantillonnage;
     }
 
@@ -33,22 +33,22 @@ public class Sensor implements NamedElement {
     }
 
     /**
-     * @return the loi
+     * @return the law
      */
-    public Comportement getLoi() {
-        return loi;
+    public Behavior getLaw() {
+        return law;
     }
 
     /**
-     * @param loi the loi to set
+     * @param law the law to set
      */
-    public void setLoi(Comportement loi) {
-        this.loi = loi;
+    public void setLaw(Behavior law) {
+        this.law = law;
     }
 
     public float generationDonnees(int relativeTime) {
         if (relativeTime % echantillonnage == 0) {
-            float temp = loi.createData(relativeTime);
+            float temp = law.createData(relativeTime);
             lastValue = temp;
             return temp;
         } else {

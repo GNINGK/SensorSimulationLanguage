@@ -14,13 +14,14 @@ import java.util.List;
 /**
  * @author Maxime
  */
-public class CSVLoader extends Comportement {
+public class CSVLoader extends Behavior {
 
     List<Tuple> dataSource;
     String pathCSV;
     String sensorName;
     long timeMin = -1;
     long timeMax = -1;
+    String lastValue = null;
 
     public CSVLoader(String pathCSV, String sensorName) {
         dataSource = new ArrayList<>();

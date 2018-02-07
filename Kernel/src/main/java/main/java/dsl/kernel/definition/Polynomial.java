@@ -1,19 +1,19 @@
 package main.java.dsl.kernel.definition;
 
 /**
- * @author user
+ *
+ * @author Maxime
  */
-public class Functions extends Comportement {
+public class Polynomial extends Functions {
 
     private double[] polynome;
-    private double xMax;
-
-    public Functions(double[] polynome, double xMax) {
+private double xMax;
+    public Polynomial(double[] polynome, double xMax) {
         this.polynome = polynome;
         this.xMax = xMax;
     }
 
-    @Override
+        @Override
     public float createData(int relativeTime) {
         float result = 0;
         for (int i = 0; i < polynome.length; i++) {
@@ -29,5 +29,4 @@ public class Functions extends Comportement {
         }
         return result;
     }
-
 }
