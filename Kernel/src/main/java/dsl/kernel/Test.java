@@ -26,10 +26,7 @@ public class Test {
 
     public static void main(String[] args) {
         //csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
-        double[] polynome = new double[3];
-        polynome[0] = 1.0;
-        polynome[1] = 4.0;
-        polynome[2] = 6.0;
+        double[] polynome = {1.0, 4.0, 6.0};
         functions = new Functions(polynome);
 
         simu = new Simulation(5);
