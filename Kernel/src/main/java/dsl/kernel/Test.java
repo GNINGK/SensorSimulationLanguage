@@ -7,8 +7,8 @@ package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Comportement;
 import main.java.dsl.kernel.definition.Functions;
-import main.java.dsl.kernel.structure.Capteur;
-import main.java.dsl.kernel.structure.Lieu;
+import main.java.dsl.kernel.structure.Sensor;
+import main.java.dsl.kernel.structure.Place;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Test {
     static Comportement csvLoader;
     static Comportement functions;
     static Simulation simu;
-    static Lieu batA;
+    static Place batA;
 
     public static void main(String[] args) {
         //csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
@@ -30,16 +30,16 @@ public class Test {
         functions = new Functions(polynome);
 
         simu = new Simulation(5);
-        batA = new Lieu();
+        batA = new Place();
         batA.setName("batA");
 
-        List<Capteur> listC = new ArrayList<>();
+        List<Sensor> listC = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            listC.add(new Capteur("sensor" + i, functions, 2));
+            listC.add(new Sensor("sensor" + i, functions, 2));
         }
 
-        batA.addCapteur(listC);
-        simu.setLieux(batA);
+        batA.addSensor(listC);
+        simu.setPlaces(batA);
 
         simu.run();
     }

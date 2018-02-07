@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * @author Maxime
  */
-public class Lieu implements NamedElement {
+public class Place implements NamedElement {
 
     private String name;
-    private List<Capteur> capteurs;
+    private List<Sensor> sensors;
 
-    public Lieu() {
-        capteurs = new ArrayList<>();
+    public Place() {
+        sensors = new ArrayList<>();
     }
 
     @Override
@@ -28,15 +28,15 @@ public class Lieu implements NamedElement {
     }
 
     /**
-     * @return La liste des capteurs
+     * @return La liste des sensors
      */
-    public List<Capteur> getCapteurs() {
-        return capteurs;
+    public List<Sensor> getSensors() {
+        return sensors;
     }
 
-    public Capteur getCapteurByName(String name) {
-        Capteur result = null;
-        for (Capteur c : capteurs) {
+    public Sensor getSensorByName(String name) {
+        Sensor result = null;
+        for (Sensor c : sensors) {
             if (c.getName().equals(name)) {
                 result = c;
             }
@@ -44,12 +44,12 @@ public class Lieu implements NamedElement {
         return result;
     }
 
-    public void addCapteur(Capteur cap) {
-        capteurs.add(cap);
+    public void addSensor(Sensor cap) {
+        sensors.add(cap);
     }
 
-    public void addCapteur(List<Capteur> cap) {
-        capteurs.addAll(cap);
+    public void addSensor(List<Sensor> cap) {
+        sensors.addAll(cap);
     }
 
 }

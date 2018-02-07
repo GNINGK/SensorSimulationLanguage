@@ -6,8 +6,8 @@
 package main.java.dsl.kernel;
 
 import main.java.dsl.kernel.definition.Tuple;
-import main.java.dsl.kernel.structure.Capteur;
-import main.java.dsl.kernel.structure.Lieu;
+import main.java.dsl.kernel.structure.Place;
+import main.java.dsl.kernel.structure.Sensor;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -26,14 +26,14 @@ public class Simulation implements NamedElement {
     private static final Logger LOGGER = Logger.getLogger(Simulation.class);
 
     private String name;
-    private List<Lieu> lieux;
+    private List<Place> places;
     private int tempsTotalSimulation;
 
     Simulation(int tempsTotalSimulation) {
         BasicConfigurator.configure();
 
         this.tempsTotalSimulation = tempsTotalSimulation;
-        lieux = new ArrayList<>();
+        places = new ArrayList<>();
     }
 
     @Override
@@ -47,15 +47,15 @@ public class Simulation implements NamedElement {
     }
 
     /**
-     * @return the lieux
+     * @return the places
      */
-    public List<Lieu> getLieux() {
-        return lieux;
+    public List<Place> getPlaces() {
+        return places;
     }
 
-    public Lieu getLieuByName(String name) {
-        Lieu result = null;
-        for (Lieu l : lieux) {
+    public Place getPlaceByName(String name) {
+        Place result = null;
+        for (Place l : places) {
             if (l.getName().equals(name)) {
                 result = l;
             }
@@ -64,18 +64,18 @@ public class Simulation implements NamedElement {
     }
 
     /**
-     * @param lieux the lieux to set
+     * @param places the places to set
      */
-    public void setLieux(Lieu lieux) {
-        this.lieux.add(lieux);
+    public void setPlaces(Place places) {
+        this.places.add(places);
     }
 
     public void run() {
-        for (Lieu l : lieux) {
-            List<Capteur> listCapteur = l.getCapteurs();
+        for (Place l : places) {
+            List<Sensor> listSensor = l.getSensors();
             List<Tuple> resultat = new ArrayList<>();
-            LOGGER.info("Lieu : " + l.getName());
-            for (Capteur c : listCapteur) {
+            LOGGER.info("Place : " + l.getName());
+            for (Sensor c : listSensor) {
                 LOGGER.info("capteur : " + c.getName());
 
                 for (int i = 0; i < tempsTotalSimulation; i++) {

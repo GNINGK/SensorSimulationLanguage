@@ -9,14 +9,14 @@ import main.java.dsl.kernel.definition.Comportement;
  *
  * @author Maxime
  */
-public class Capteur implements NamedElement {
+public class Sensor implements NamedElement {
 
     private String name;
     private Comportement loi;
     private int echantillonnage;
     private String lastValue = null;
 
-    public Capteur(String name, Comportement loi, int echantillonnage) {
+    public Sensor(String name, Comportement loi, int echantillonnage) {
         this.name = name;
         this.loi = loi;
         this.echantillonnage = echantillonnage;

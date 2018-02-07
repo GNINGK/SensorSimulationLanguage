@@ -18,23 +18,23 @@ public class CSVLoader extends Comportement {
 
     List<Tuple> dataSource;
     String pathCSV;
-    String nameCapteur;
+    String sensorName;
     int timeMin = -1;
     int timeMax = -1;
 
-    public CSVLoader(String pathCSV, String nameCapteur) {
+    public CSVLoader(String pathCSV, String sensorName) {
         dataSource = new ArrayList<>();
         this.pathCSV = pathCSV;
-        this.nameCapteur = nameCapteur;
+        this.sensorName = sensorName;
         if (pathCSV != null) {
             getDataCSV();
         }
     }
 
-    public CSVLoader(String pathCSV, String nameCapteur, int timeMin, int timeMax) {
+    public CSVLoader(String pathCSV, String sensorName, int timeMin, int timeMax) {
         dataSource = new ArrayList<>();
         this.pathCSV = pathCSV;
-        this.nameCapteur = nameCapteur;
+        this.sensorName = sensorName;
         this.timeMax = timeMax;
         this.timeMin = timeMin;
         if (pathCSV != null) {
@@ -56,7 +56,7 @@ public class CSVLoader extends Comportement {
                 int time = Integer.parseInt(tuple[0]);
                 String sensor = tuple[1].replaceAll("\"", "");
                 String value = tuple[2].replaceAll("\"", "");
-                if (sensor.equals(nameCapteur) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
+                if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
                     Tuple t = new Tuple(time, sensor, value);
                     dataSource.add(t);
                 }
