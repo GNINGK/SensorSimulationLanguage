@@ -7,20 +7,19 @@ import java.util.ArrayList;
  */
 public class IntervalFunctions extends Functions {
 
-    private ArrayList<Functions> mChildGraphics = new ArrayList<Functions>();
+    private ArrayList<Functions> interval = new ArrayList<Functions>();
 
     @Override
     public float createData(int instantT) {
+        
         return -1;
     }
 
-    //Ajoute le graphique à la composition.
     public void add(Functions function) {
-        mChildGraphics.add(function);
+        interval.add(function);
     }
 
-    //Retire le graphique de la composition.
     public void remove(Functions function) {
-        mChildGraphics.remove(function);
+        interval.remove(function);
     }
 }
