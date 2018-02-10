@@ -1,7 +1,7 @@
 package main.java.dsl.kernel.definition;
  
 /** 
- * @author user 
+ * @author Maxime 
  */ 
 public class Markov extends Behavior { 
  

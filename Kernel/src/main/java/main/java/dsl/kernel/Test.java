@@ -7,6 +7,7 @@ import main.java.dsl.kernel.structure.Sensor;
 
 import java.util.ArrayList;
 import java.util.List;
+import main.java.dsl.kernel.definition.Interval;
 
 /**
  * @author Maxime
@@ -14,7 +15,7 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
-        //csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
+        /*//csvLoader = new CSVLoader("dataSource.csv", "sensor1", 2, 10);
         double[] polynome = {0, 2, -1.0 / 10.0};
         Functions functions = new Polynomial(polynome, 20);
 
@@ -30,6 +31,8 @@ public class Test {
         batA.addSensors(listC);
         simulation.addPlaces(batA);
 
-        simulation.run();
+        simulation.run();*/
+        
+        Interval inter = new Interval(Double.NEGATIVE_INFINITY, 2.0);
     }
 }
