@@ -14,7 +14,7 @@ public class Polynomial extends Functions {
     }
 
     @Override
-    public float createData(int relativeTime) {
+    public float createData(float relativeTime) {
         float result = 0;
         for (int i = 0; i < polynome.length; i++) {
             if (i == 0) {

@@ -17,7 +17,7 @@ public class Markov extends Behavior {
     } 
  
     @Override 
-    public float createData(int relativeTime) { 
+    public float createData(float relativeTime) { 
         float result = 0; 
         if (relativeTime % frequence == 0) { 
             double r = Math.random(); 

@@ -70,7 +70,7 @@ public class CSVLoader extends Behavior {
     }
 
     @Override
-    public float createData(int relativeTime) {
+    public float createData(float relativeTime) {
         float result = 0;
         if (!dataSource.isEmpty()) {
             for (Tuple d : dataSource) {
