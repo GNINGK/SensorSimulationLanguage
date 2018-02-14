@@ -5,10 +5,10 @@ package main.java.dsl.kernel.definition;
  */
 public class Polynomial extends Functions {
 
-    private double[] polynome;
+    private Double[] polynome;
     private double xMax;
 
-    public Polynomial(double[] polynome, double xMax) {
+    public Polynomial(Double[] polynome, double xMax) {
         this.polynome = polynome;
         this.xMax = xMax;
     }

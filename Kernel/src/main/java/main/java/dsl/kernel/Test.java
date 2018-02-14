@@ -25,8 +25,8 @@ public class Test {
          simulation.addPlaces(batA);
 
          simulation.run();*/
-        double[] polynome2 = {0, 5, -2};
-        double[] polynome = {0};
+        Double[] polynome2 = {0.0, 5.0, -2.0};
+        Double[] polynome = {0.0};
         Functions functions = new Polynomial(polynome, 20);
         Functions functions2 = new Polynomial(polynome2, 20);
         IntervalFunctions ifs = new IntervalFunctions();

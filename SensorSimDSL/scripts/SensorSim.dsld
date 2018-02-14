@@ -1,0 +1,24 @@
+
+import java.lang.reflect.Method;
+
+// this is a DSLD file
+// start off creating a custom DSL Descriptor for your Groovy DSL
+
+// The following snippet adds the 'newProp' to all types that are a subtype of GroovyObjects
+contribute(currentType(subType('groovy.lang.Script'))) {
+
+	method type: Script, name: 'simulation', params: [name:String], doc: 'Create a new Simulation'
+	method type: void, name: 'lasting', params: [totalTime:Integer], doc: 'Associate a duration to a Simulation'
+
+	method type: Script, name: 'instantiate', params: [name:String], doc: 'Create a Place'
+	method type: Script, name: 'and', params: [name:String], doc: 'Define another Place to create'
+
+	method type: Script, name: 'law', params: [name:String], doc: 'Instantiate a law'
+	method type: Script, name: 'function', params: [type:String], doc: 'Type of law'
+	method type: void, name: 'with', params: [coefficient:Double], doc: 'Define function coefficient'
+	method type: void, name: 'and', params: [coefficient:Double], doc: 'Define another coefficient for a function'
+
+	method type: void, name: '', params: [coefficient:Double], doc: 'Define another coefficient for a function'
+
+
+}

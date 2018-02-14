@@ -4,3 +4,4 @@ Kernel/target/
 
 .idea/
 Kernel/Kernel.iml
+*.iml
