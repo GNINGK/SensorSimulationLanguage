@@ -1,7 +1,7 @@
 package main.java.dsl.kernel;
 
 /**
- * @author user
+ * @author Maxime
  */
 public interface NamedElement {
     void setName(String name);

@@ -31,12 +31,19 @@ public class Simulation implements NamedElement {
     private List<Place> places;
     private int totalTime;
 
-    Simulation(int totalTime) {
+    public Simulation() {
         BasicConfigurator.configure();
-        initDB("http://192.168.99.100:8086", "sensors_database");
+        initDB("http://localhost:8086", "sensors_database");
+
+        this.places = new ArrayList<>();
+    }
+
+    public Simulation(int totalTime) {
+        BasicConfigurator.configure();
+        initDB("http://localhost:8086", "sensors_database");
+        this.places = new ArrayList<>();
 
         this.totalTime = totalTime;
-        this.places = new ArrayList<>();
     }
 
     @Override
@@ -78,6 +85,13 @@ public class Simulation implements NamedElement {
      */
     public int getTotalTime() {
         return this.totalTime;
+    }
+
+    /**
+     * @param totalTime total time of the simulation
+     */
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
     }
 
 
