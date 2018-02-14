@@ -22,7 +22,7 @@ class SensorSimDSL {
         def secure = new SecureASTCustomizer()
         secure.with {
             //disallow closure creation
-            closuresAllowed = false
+            closuresAllowed = true
             //disallow method definitions
             methodDefinitionAllowed = true
             //empty white list => forbid imports
@@ -37,11 +37,11 @@ class SensorSimDSL {
             tokensWhitelist= []
             //types allowed to be used  (including primitive types)
             constantTypesClassesWhiteList= [
-                    int, Integer, Number, Integer.TYPE, String, Object
+                    int, Integer, BigDecimal, Number, Integer.TYPE, String, Object
             ]
             //classes who are allowed to be receivers of method calls
             receiversClassesWhiteList= [
-                    int, Number, Integer, String, Object
+                    int, BigDecimal, Number, Integer, String, Object
             ]
         }
 

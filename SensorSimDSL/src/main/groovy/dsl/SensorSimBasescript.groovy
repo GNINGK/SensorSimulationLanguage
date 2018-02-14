@@ -16,44 +16,27 @@ abstract class SensorSimBasescript extends Script  {
     def instantiate(String name) {
         ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace(name)
         def closure
-        closure = { place -> ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace(place)}
+        closure = { place ->
+            ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace((String) place)
+        }
         [and: closure]
     }
 
     def law(String name) {
+        List<Double> coeffList = new ArrayList<>()
         [function: { type ->
-            //if (((String) type).equals("polynome")){
-                List<Double> coefficients = new ArrayList<>()
-               /* def closure
-                closure = { coefficient ->
-                    coefficients.add(coefficient)
-                    [and: closure]
-                }
-                [with: closure]
-                ((SensorSimBinding)this.getBinding()).getSensorSimModel().createLaw(name, type, ((Double[]) coefficients.toArray()))
-*/
-            [with: { coeff ->
-                coefficients.add(coeff)
-                ((SensorSimBinding)this.getBinding()).getSensorSimModel().createLaw(name, type, ((Double[]) coefficients.toArray()))
+            [coefficients: { coeffNb ->
+                int i = 0;
+                while(i < coeffNb){
+                    Double random = new Random().nextDouble()
+                    Double coeff = random
+                    coeffList.add(coeff)
+                    i++
+                }//with 1.0 and 2.0 and 3.0
+                ((SensorSimBinding)this.getBinding()).getSensorSimModel().createLaw(name, type, ((Double[]) coeffList.toArray()))
             }]
-           /* } else if (((String) type).equals("ifs")) {
-                def closure
-                closure = { coefficient ->
-                    System.out.print(test2);
-                    ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw(name, "ifs", new Double[0])
-                    [from: { a ->
-                        [to: { b ->
-                            [follows: { lawName ->
-                                ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(new Interval(a, b), ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)))
-                            }]
-                        }]
-                    }]
-                    [and: closure]
-                }
-                [considering: closure]
-            } else if (((String) type).equals("markov")) {
 
-            }*/
+
         }]
     }
 

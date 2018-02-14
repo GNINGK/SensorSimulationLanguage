@@ -1,9 +1,10 @@
 simulation "simulation1" lasting 8
 
-instantiate "buildingA" and "buildingB"
+instantiate "buildingA"
+instantiate "buildingB"
 instantiate "buildingC"
 
-law "polLaw" function "polynome" with 1 //and 2 and 3
+law "polLaw" function "polynome" coefficients "3"
 
 sensor "tempSensor" follows "polLaw" every 2
 

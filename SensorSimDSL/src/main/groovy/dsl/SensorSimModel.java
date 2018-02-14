@@ -61,7 +61,8 @@ public class SensorSimModel {
     public void addSensors(String placeName, Sensor sensor, int sensorNb) {
         int i = 0;
         while(i < sensorNb){
-            addSensor(placeName, sensor);
+            Sensor sensorCopy = new Sensor(sensor.getName()  + "_" + i, sensor.getLaw(), sensor.getEchantillonnage());
+            addSensor(placeName, sensorCopy);
             i++;
         }
     }
