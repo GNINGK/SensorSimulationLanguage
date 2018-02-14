@@ -48,7 +48,7 @@ public class Sensor implements NamedElement {
 
     public float generationDonnees(int relativeTime) {
         if (relativeTime % echantillonnage == 0) {
-            float temp = law.createData(relativeTime);
+            float temp = law.createData(relativeTime, 0);
             lastValue = temp;
             return temp;
         } else {

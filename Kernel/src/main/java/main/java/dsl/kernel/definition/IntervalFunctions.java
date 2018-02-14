@@ -13,14 +13,14 @@ public class IntervalFunctions extends Functions {
     private HashMap<Interval, Functions> listIntervals = new HashMap<>();
 
     @Override
-    public float createData(float instantT) {
+    public float createData(float instantT, float noise) {
 
         float result = Float.NaN;
         for (Entry<Interval, Functions> entry : listIntervals.entrySet()) {
             Interval interval = entry.getKey();
             Functions function = entry.getValue();
             if (interval.contains(instantT)) {
-                result = function.createData(instantT);
+                result = function.createData(instantT, 0);
             }
         }
         return result;
