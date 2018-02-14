@@ -14,7 +14,12 @@ public class Place implements NamedElement {
     private List<Sensor> sensors;
 
     public Place() {
-        sensors = new ArrayList<>();
+        this.sensors = new ArrayList<>();
+    }
+
+    public Place(String name) {
+        this.name = name;
+        this.sensors = new ArrayList<>();
     }
 
     @Override

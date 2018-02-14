@@ -39,7 +39,9 @@ public class Simulation implements NamedElement {
     }
 
     public Simulation(int totalTime) {
-        super();
+        BasicConfigurator.configure();
+        initDB("http://localhost:8086", "sensors_database");
+        this.places = new ArrayList<>();
 
         this.totalTime = totalTime;
     }
