@@ -94,10 +94,10 @@ public class CSVLoader extends Behavior {
                     }
                 }
                 result = (min.getValue() + max.getValue()) / 2;
-                System.out.println("Result = " + ((min.getValue() + max.getValue()) / 2) + " min = " + min.getValue() + " max = " + max.getValue());
             }
         }
-
-        return result + generateNoise(noise);
+        float rand = generateNoise(noise);
+        System.out.println("Noise = " + rand);
+        return result + rand;
     }
 }
