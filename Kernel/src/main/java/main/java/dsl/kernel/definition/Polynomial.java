@@ -27,6 +27,7 @@ public class Polynomial extends Functions {
                 }
             }
         }
+        result = (float)Math.min(result,100000.0);
         return result;
     }
 }

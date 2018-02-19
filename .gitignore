@@ -1,6 +1,7 @@
 influxdb-data/
 grafana-data/
 Kernel/target/
+SensorSimDSL/target/
 
 .idea/
 Kernel/Kernel.iml

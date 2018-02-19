@@ -1,6 +1,7 @@
 package main.java.dsl.kernel.definition;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,9 +43,10 @@ public class CSVLoader extends Behavior {
         BufferedReader buffer = null;
         String[] tuple = null;
         try {
-            String line;
-            buffer = new BufferedReader(new FileReader(pathCSV));
+            String filePath = new File("").getAbsolutePath();
+            buffer = new BufferedReader(new FileReader(filePath + "/resources/" + pathCSV));
 
+            String line;
             while ((line = buffer.readLine()) != null) {
                 //Format (time,sensor,value)
                 tuple = line.split(",");
@@ -58,6 +60,7 @@ public class CSVLoader extends Behavior {
             }
 
         } catch (IOException e) {
+            System.out.println(e);
         } finally {
             try {
                 if (buffer != null) {
@@ -72,6 +75,7 @@ public class CSVLoader extends Behavior {
     public float createData(float relativeTime, float noise) {
         float result = 0;
         if (!dataSource.isEmpty()) {
+            System.out.println("OK");
             boolean valeurTrouve = false;
             for (Tuple d : dataSource) {
                 if (d.getTime() == relativeTime) {
