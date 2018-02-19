@@ -33,14 +33,14 @@ public class Simulation implements NamedElement {
 
     public Simulation() {
         BasicConfigurator.configure();
-        //initDB("http://localhost:8086", "sensors_database");
+        initDB("http://localhost:8086", "sensors_database");
 
         this.places = new ArrayList<>();
     }
 
     public Simulation(int totalTime) {
         BasicConfigurator.configure();
-        //initDB("http://localhost:8086", "sensors_database");
+        initDB("http://localhost:8086", "sensors_database");
         this.places = new ArrayList<>();
 
         this.totalTime = totalTime;
@@ -102,7 +102,7 @@ public class Simulation implements NamedElement {
                 for (int i = 0; i < this.totalTime; i++) {
                     if (i % sensor.getEchantillonnage() == 0) {
                         long t = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
-                        //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+                        saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
                     }
                 }
             }
