@@ -39,45 +39,6 @@ public class Interval {
         return false;
     }
 
-    /* Version ou min et max peuvent etre nulle
-     public boolean intersects(Interval interval) {
-     if (getMin() != Double.NaN && getMax() != Double.NaN) {
-     if (interval.getMin() != Double.NaN && interval.getMax() != Double.NaN) {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     } else {
-     if (interval.getMin() == Double.NaN) {
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     } else {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     }
-     }
-     } else {
-     if (interval.getMin() != Double.NaN && interval.getMax() != Double.NaN) {
-     if (getMin() == Double.NaN) {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     } else {
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     }
-     } else {
-                
-     }
-     }
-
-     return true;
-     }*/
     public boolean contains(double x) {
         if (getMin() <= x && x <= getMax()) {
             return true;
