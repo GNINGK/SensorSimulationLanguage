@@ -22,7 +22,6 @@ public class Interval {
     public Interval(double min, double max) {
         if (min <= max) {
             this.min = min;
-
             this.max = max;
         } else {
             throw new IllegalArgumentException("La borne max doit être >= a la borne min");
@@ -31,9 +30,9 @@ public class Interval {
 
     public boolean intersects(Interval interval) {
 
-        if (this.min > interval.min && this.min < interval.getMax()) {
+        if (this.min >= interval.min && this.min <= interval.getMax()) {
             return true;
-        } else if (interval.getMin() > this.min && interval.getMin() < this.getMax()) {
+        } else if (interval.getMin() >= this.min && interval.getMin() <= this.getMax()) {
             return true;
         }
         return false;
