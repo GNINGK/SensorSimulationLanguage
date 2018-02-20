@@ -52,7 +52,7 @@ public class CSVLoader extends Behavior {
                 String sensor = tuple[1];
                 float value = Float.parseFloat(tuple[2]);
                 if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
-                    Tuple t = new Tuple(time, sensor, value);
+                    Tuple<Float> t = new Tuple<>(time, sensor, value);
                     dataSource.add(t);
                 }
             }
@@ -75,13 +75,13 @@ public class CSVLoader extends Behavior {
             boolean valeurTrouve = false;
             for (Tuple d : dataSource) {
                 if (d.getTime() == relativeTime) {
-                    result = d.getValue();
+                    result = (float)d.getValue();
                     valeurTrouve = true;
                 }
             }
             //Si le point n'est pas dans la liste calcul la valeur moyenne entre la valeur precedente et la prochaine valeur
             if (valeurTrouve == false) {
-                Tuple min = null, max = null;
+                Tuple<Float> min = null, max = null;
                 float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
                 for (Tuple d : dataSource) {
 
