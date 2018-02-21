@@ -14,7 +14,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0}, 0, 20);
+        /*Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0}, 0, 20);
         Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0}, 0, 10);
         Functions function3 = new Polynomial(new Double[]{10.0, 0.0, -1.0 / 10.0}, -10, 10);
 
