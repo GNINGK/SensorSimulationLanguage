@@ -1,55 +1,113 @@
 package main.java.dsl.kernel.definition;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author user
  */
-public class CSVLoader extends Behavior<Float> {
+public class FileLoader extends Behavior<Float> {
 
-    List<Tuple> dataSource;
-    String pathCSV;
+    private List<Tuple> dataSource;
+    String pathFile;
     String sensorName;
     long timeMin = -1;
     long timeMax = -1;
     float lastResult = 0;
 
-    public CSVLoader(String pathCSV, String sensorName) {
+    public FileLoader(String pathFile, String sensorName) {
         dataSource = new ArrayList<>();
-        this.pathCSV = pathCSV;
+        this.pathFile = pathFile;
         this.sensorName = sensorName;
-        if (pathCSV != null) {
-            getDataCSV();
+        if (pathFile != null) {
+            getFile();
         }
     }
 
-    public CSVLoader(String pathCSV, String sensorName, int timeMin, int timeMax) {
+    public FileLoader(String pathFile, String sensorName, int timeMin, int timeMax) {
         dataSource = new ArrayList<>();
-        this.pathCSV = pathCSV;
+        this.pathFile = pathFile;
         this.sensorName = sensorName;
         this.timeMax = timeMax;
         this.timeMin = timeMin;
-        if (pathCSV != null) {
-            getDataCSV();
-            if (dataSource.isEmpty()) {
-                throw new IllegalArgumentException("");
-            }
+        if (pathFile != null) {
+            getFile();
         }
-
     }
 
-    public void getDataCSV() {
+    private void getFile() {
+        Pattern csv = Pattern.compile(".*.csv"); 
+        Pattern json = Pattern.compile(".*.json"); 
+        Matcher mcsv = csv.matcher(pathFile) ; 
+        Matcher mjson = json.matcher(pathFile) ; 
+        if (mcsv.find()) {
+            getDataCSV();
+        } else if (mjson.find()) {
+            getdataJSON();
+        } else {
+            throw new IllegalArgumentException("Le fichier passe en parametre est inconnu.");
+        }
+
+        if (getDataSource().isEmpty()) {
+            throw new IllegalArgumentException("Il n'y a aucune valeur pour le capteur passe en parametre.");
+        }
+    }
+
+    private void getdataJSON() {
+
+        File file = new File(pathFile);
+        if (file.isFile()) {
+            JSONArray jsonArray = new JSONArray(loadFile(file));
+            JSONObject jsonObject = null;
+            for (int j = 0; j < jsonArray.length(); j++) {
+                jsonObject = jsonArray.getJSONObject(j);
+                String sensor = jsonObject.getString("sensorName");
+                if (sensor.equals(sensorName))
+                {
+                    Tuple<Float> t = new Tuple<>(jsonObject.getInt("time"), sensor, (float)jsonObject.getDouble("value"));
+                    getDataSource().add(t);
+                }
+            }
+        }
+    }
+
+    public static String loadFile(File f) {
+        BufferedInputStream in = null;
+        StringWriter out = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(f));
+            out = new StringWriter();
+            int b;
+            while ((b = in.read()) != -1) {
+                out.write(b);
+            }
+            out.flush();
+            out.close();
+            in.close();
+
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        }
+        return out.toString();
+    }
+
+    private void getDataCSV() {
         BufferedReader buffer = null;
         String[] tuple = null;
         try {
             String filePath = new File("").getAbsolutePath();
-            buffer = new BufferedReader(new FileReader(filePath + "/resources/" + pathCSV));
+            buffer = new BufferedReader(new FileReader(pathFile));
 
             String line;
             while ((line = buffer.readLine()) != null) {
@@ -59,7 +117,7 @@ public class CSVLoader extends Behavior<Float> {
                 float value = Float.parseFloat(tuple[2]);
                 if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
                     Tuple<Float> t = new Tuple<>(time, sensor, value);
-                    dataSource.add(t);
+                    getDataSource().add(t);
                 }
             }
 
@@ -90,7 +148,7 @@ public class CSVLoader extends Behavior<Float> {
     public Float createData(float relativeTime, float noise) {
         float result = 0;
         boolean valeurTrouve = false;
-        for (Tuple d : dataSource) {
+        for (Tuple d : getDataSource()) {
             if (d.getTime() == relativeTime) {
                 result = (float) d.getValue();
                 valeurTrouve = true;
@@ -100,7 +158,7 @@ public class CSVLoader extends Behavior<Float> {
         if (valeurTrouve == false) {
             Tuple<Float> min = null, max = null;
             float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
-            for (Tuple d : dataSource) {
+            for (Tuple d : getDataSource()) {
                 if (valueBefore > relativeTime - d.getTime() && relativeTime - d.getTime() > 0) {
                     valueBefore = relativeTime - d.getTime();
                     min = d;
@@ -122,5 +180,19 @@ public class CSVLoader extends Behavior<Float> {
         float rand = generateNoise(noise);
         lastResult = result + rand;
         return lastResult;
+    }
+
+    /**
+     * @return the dataSource
+     */
+    public List<Tuple> getDataSource() {
+        return dataSource;
+    }
+
+    /**
+     * @param dataSource the dataSource to set
+     */
+    public void setDataSource(List<Tuple> dataSource) {
+        this.dataSource = dataSource;
     }
 }

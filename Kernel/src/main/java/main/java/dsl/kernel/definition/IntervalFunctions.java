@@ -23,6 +23,7 @@ public class IntervalFunctions extends Functions {
                 result = function.createData(instantT, 0);
             }
         }
+        
         return result;
     }
 
@@ -30,7 +31,7 @@ public class IntervalFunctions extends Functions {
         Set key = listIntervals.keySet();
         Iterator it = key.iterator();
         while (it.hasNext()) {
-            Interval cle = (Interval) it.next(); // tu peux typer plus finement ici
+            Interval cle = (Interval) it.next();
             if (cle.intersects(interval)) {
                 throw new IllegalArgumentException("Intersection avec un autre interval");
             }

@@ -14,8 +14,9 @@ public class Test {
 
     public static void main(String[] args) {
 
-        // Définitions des batiments
-        Place batA = new Place("batA");
+        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0}, 0, 20);
+        Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0}, 0, 10);
+        Functions function3 = new Polynomial(new Double[]{10.0, 0.0, -1.0 / 10.0}, -10, 10);
 
         // Définitions des fonctions
         Functions function1 = new Polynomial(new ArrayList<Double>(
@@ -34,14 +35,7 @@ public class Test {
         function_interval.add(i2, function2);
         function_interval.add(i3, function3);
 
-        batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
-
-        // CSV
-        CSVLoader function_csv = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
-
-        batA.addSensor(new Sensor("sensor_csv", function_csv, 1));
-
-        // MARKOV
+        CSVLoader csvLoader = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
         int nbEtat = 2;
         String[] nameEtat = {"Sunny", "Rainy"};
         float[][] transition = {{0.1f, 0.9f}, {0.5f, 0.5f}};
@@ -62,7 +56,13 @@ public class Test {
 
         simulation.addPlaces(batA);
 
-        simulation.run();
+        simulation.run();*/
+        
+        //Test load CSV and JSON
+        //FileLoader csvLoader = new FileLoader("resultat.csv", "sensor0", 0, 10);
+        //System.out.println(csvLoader.getDataSource().toString());
+        FileLoader jsonLoader = new FileLoader("resultat.json", "sensor0", 0, 10);
+        System.out.println(jsonLoader.getDataSource().toString());
     }
 
 }
