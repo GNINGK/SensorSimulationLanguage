@@ -6,10 +6,11 @@ package main.java.dsl.kernel.definition;
 public class Polynomial extends Functions {
 
     private Double[] polynome;
+    private double xMax;
 
-    public Polynomial(Double[] polynome) {
+    public Polynomial(Double[] polynome, double xMax) {
         this.polynome = polynome;
-
+        this.xMax = xMax;
     }
 
     @Override
@@ -20,9 +21,9 @@ public class Polynomial extends Functions {
                 result += polynome[i];
             } else {
                 if (polynome[i] == 0) {
-                    result = (float) Math.pow(relativeTime, i);
+                    result = (float) Math.pow(relativeTime % xMax, i);
                 } else {
-                    result += polynome[i] * Math.pow(relativeTime, i);
+                    result += polynome[i] * Math.pow(relativeTime % xMax, i);
                 }
             }
         }

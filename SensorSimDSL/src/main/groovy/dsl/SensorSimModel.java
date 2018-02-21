@@ -30,6 +30,7 @@ public class SensorSimModel {
     }
 
     public void createPlace(String name) {
+        System.out.println("Place " + name + " created");
         Place place = new Place();
         place.setName(name);
         places.put(name, place);
@@ -37,10 +38,16 @@ public class SensorSimModel {
 
     public void createLaw(String name, String type, Double[] coefficients) {
         Functions law;
-        switch (type){
-            case "polynome" : law = new Polynomial(coefficients, 20); break;
-            case "ifs" : law = new IntervalFunctions(); break;
-            default: law = new Polynomial(new Double[0], 30); break;
+        switch (type) {
+            case "polynome":
+                law = new Polynomial(coefficients, 20);
+                break;
+            case "ifs":
+                law = new IntervalFunctions();
+                break;
+            default:
+                law = new Polynomial(new Double[0], 30);
+                break;
         }
 
         this.binding.setVariable(name, law);
@@ -55,20 +62,20 @@ public class SensorSimModel {
     }
 
     public void addSensor(String placeName, Sensor sensor) {
-       places.get(placeName).addSensor(sensor);
+        places.get(placeName).addSensor(sensor);
     }
 
     public void addSensors(String placeName, Sensor sensor, int sensorNb) {
         int i = 0;
-        while(i < sensorNb){
-            Sensor sensorCopy = new Sensor(sensor.getName()  + "_" + i, sensor.getLaw(), sensor.getEchantillonnage());
+        while (i < sensorNb) {
+            Sensor sensorCopy = new Sensor(sensor.getName() + "_" + i, sensor.getLaw(), sensor.getEchantillonnage());
             addSensor(placeName, sensorCopy);
             i++;
         }
     }
 
-    public void runSimulation(){
-        for(Place place : places.values()){
+    public void runSimulation() {
+        for (Place place : places.values()) {
             simulation.addPlaces(place);
         }
         simulation.run();

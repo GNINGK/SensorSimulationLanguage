@@ -87,7 +87,6 @@ public class CSVLoader extends Behavior {
     public float createData(float relativeTime, float noise) {
         float result = 0;
         if (!dataSource.isEmpty()) {
-            System.out.println("OK");
             boolean valeurTrouve = false;
             for (Tuple d : dataSource) {
                 if (d.getTime() == relativeTime) {
