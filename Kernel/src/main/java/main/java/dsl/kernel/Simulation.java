@@ -144,10 +144,13 @@ public class Simulation implements NamedElement {
     }
 
     private void saveToDB(Tuple tuple) {
+        float value = tuple.getValue() instanceof String ? ((String) tuple.getValue()).charAt(0) : (float) tuple.getValue();
+
         influxDB.write(Point.measurement(tuple.getSensor())
                 .time(tuple.getTime(), TimeUnit.MILLISECONDS)
-                .addField("value", (float)tuple.getValue())
+                .addField("value", value)
                 .build());
+
     }
 
     private void initDB(String dbLink, String dbName) {

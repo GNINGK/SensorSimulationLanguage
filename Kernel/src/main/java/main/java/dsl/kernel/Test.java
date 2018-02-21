@@ -37,8 +37,14 @@ public class Test {
 
         //Definition de la simulation
         Simulation simulation = new Simulation(30);
-        //batA.addSensor(new Sensor<>("sensor0", csvLoader, 1));
-        batA.addSensor(new Sensor<>("sensor0", markovLaw, 1));
+
+        batA.addSensor(new Sensor<>("sensor_markov", markovLaw, 1));
+
+        batA.addSensor(new Sensor("sensor_csv", csvLoader, 1));
+        batA.addSensor(new Sensor("sensor1", function1, 1));
+        batA.addSensor(new Sensor("sensor2", function2, 1));
+        batA.addSensor(new Sensor("sensor_interval", ifs, 1));
+
         simulation.addPlaces(batA);
 
         simulation.run();
