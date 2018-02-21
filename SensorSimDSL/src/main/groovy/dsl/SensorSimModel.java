@@ -43,13 +43,13 @@ public class SensorSimModel {
 
         switch (type) {
             case "polynome":
-                law = new Polynomial(20);
+                law = new Polynomial(0, 20);
                 break;
             case "ifs":
                 law = new IntervalFunctions();
                 break;
             default:
-                law = new Polynomial(30);
+                law = new Polynomial(0, 30);
                 break;
         }
 

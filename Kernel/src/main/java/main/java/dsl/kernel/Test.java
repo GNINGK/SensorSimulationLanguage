@@ -14,23 +14,17 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Functions function1 = new Polynomial(new ArrayList<Double>(
-                Arrays.asList(0.0, 2.0, -1.0 / 10.0)), 20);
-        Functions function2 = new Polynomial(new ArrayList<Double>(
-                Arrays.asList(0.0, 2.0, -1.0 / 5.0)), 10);
         // Définitions des batiments
         Place batA = new Place("batA");
 
         // Définitions des fonctions
-        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0}, 0, 20);
-        Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0}, 0, 10);
+        Functions function1 = new Polynomial(new ArrayList<Double>(
+                Arrays.asList(0.0, 2.0, -1.0 / 10.0)), 0, 20);
+        Functions function2 = new Polynomial(new ArrayList<Double>(
+                Arrays.asList(0.0, 2.0, -1.0 / 5.0)), 0, 10);
 
         Functions function3 = new Polynomial(new ArrayList<Double>(
-                Arrays.asList(5.0)), 100);
-        Functions function4 = new Polynomial(new ArrayList<Double>(
-                Arrays.asList(0.0)), 100);
-
-        Functions function3 = new Polynomial(new Double[]{10.0, 0.0, -1.0 / 10.0}, -10, 10);
+                Arrays.asList(10.0, 0.0, -1.0 / 10.0)), -10, 10);
 
         IntervalFunctions function_interval = new IntervalFunctions();
         Interval i = new Interval(0.0, 40.0);
@@ -59,12 +53,12 @@ public class Test {
         //Definition de la simulation
         Simulation simulation = new Simulation(30);
 
-        batA.addSensor(new Sensor<>("sensor_markov", markovLaw, 1));
+        batA.addSensor(new Sensor<>("sensor_markov", function_markov, 1));
 
-        batA.addSensor(new Sensor("sensor_csv", csvLoader, 1));
+        batA.addSensor(new Sensor("sensor_csv", function_csv, 1));
         batA.addSensor(new Sensor("sensor1", function1, 1));
         batA.addSensor(new Sensor("sensor2", function2, 1));
-        batA.addSensor(new Sensor("sensor_interval", ifs, 1));
+        batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
 
         simulation.addPlaces(batA);
 
