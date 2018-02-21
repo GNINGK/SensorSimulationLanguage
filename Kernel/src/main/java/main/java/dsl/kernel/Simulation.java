@@ -146,7 +146,7 @@ public class Simulation implements NamedElement {
     private void saveToDB(Tuple tuple) {
         influxDB.write(Point.measurement(tuple.getSensor())
                 .time(tuple.getTime(), TimeUnit.MILLISECONDS)
-                .addField("value", tuple.getValue())
+                .addField("value", (float)tuple.getValue())
                 .build());
     }
 

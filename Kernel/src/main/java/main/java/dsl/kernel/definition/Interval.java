@@ -22,7 +22,6 @@ public class Interval {
     public Interval(double min, double max) {
         if (min <= max) {
             this.min = min;
-
             this.max = max;
         } else {
             throw new IllegalArgumentException("La borne max doit être >= a la borne min");
@@ -31,53 +30,14 @@ public class Interval {
 
     public boolean intersects(Interval interval) {
 
-        if (this.min > interval.min && this.min < interval.getMax()) {
+        if (this.min >= interval.min && this.min <= interval.getMax()) {
             return true;
-        } else if (interval.getMin() > this.min && interval.getMin() < this.getMax()) {
+        } else if (interval.getMin() >= this.min && interval.getMin() <= this.getMax()) {
             return true;
         }
         return false;
     }
 
-    /* Version ou min et max peuvent etre nulle
-     public boolean intersects(Interval interval) {
-     if (getMin() != Double.NaN && getMax() != Double.NaN) {
-     if (interval.getMin() != Double.NaN && interval.getMax() != Double.NaN) {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     } else {
-     if (interval.getMin() == Double.NaN) {
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     } else {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     }
-     }
-     } else {
-     if (interval.getMin() != Double.NaN && interval.getMax() != Double.NaN) {
-     if (getMin() == Double.NaN) {
-     if (this.getMax() < interval.getMin()) {
-     return false;
-     }
-     } else {
-     if (interval.getMax() < this.getMin()) {
-     return false;
-     }
-     }
-     } else {
-                
-     }
-     }
-
-     return true;
-     }*/
     public boolean contains(double x) {
         if (getMin() <= x && x <= getMax()) {
             return true;

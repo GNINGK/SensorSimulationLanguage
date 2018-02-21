@@ -11,11 +11,11 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0}, 20);
-        Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0}, 10);
+        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0});
+        Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0});
 
-        Functions function3 = new Polynomial(new Double[]{5.0}, 100);
-        Functions function4 = new Polynomial(new Double[]{0.0}, 100);
+        Functions function3 = new Polynomial(new Double[]{5.0});
+        Functions function4 = new Polynomial(new Double[]{0.0});
 
         IntervalFunctions ifs = new IntervalFunctions();
         Interval i = new Interval(0.0, 40.0);

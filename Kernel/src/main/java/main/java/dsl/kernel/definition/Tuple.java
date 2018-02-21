@@ -3,13 +3,13 @@ package main.java.dsl.kernel.definition;
 /**
  * @author Maxime
  */
-public class Tuple {
+public class Tuple<T> {
 
     private long time;
-    private float value;
+    private T value;
     private String sensor;
 
-    public Tuple(long time, String sensor, float value) {
+    public Tuple(long time, String sensor, T value) {
         this.time = time;
         this.value = value;
         this.sensor = sensor;
@@ -37,14 +37,14 @@ public class Tuple {
     /**
      * @return the value
      */
-    public float getValue() {
+    public T getValue() {
         return value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(float value) {
+    public void setValue(T value) {
         this.value = value;
     }
 

@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Maxime
+ *
+ * @author user
  */
 public class CSVLoader extends Behavior {
 
@@ -17,6 +18,7 @@ public class CSVLoader extends Behavior {
     String sensorName;
     long timeMin = -1;
     long timeMax = -1;
+    float lastResult = 0;
 
     public CSVLoader(String pathCSV, String sensorName) {
         dataSource = new ArrayList<>();
@@ -48,13 +50,12 @@ public class CSVLoader extends Behavior {
 
             String line;
             while ((line = buffer.readLine()) != null) {
-                //Format (time,sensor,value)
                 tuple = line.split(",");
                 int time = Integer.parseInt(tuple[0]);
                 String sensor = tuple[1];
                 float value = Float.parseFloat(tuple[2]);
                 if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
-                    Tuple t = new Tuple(time, sensor, value);
+                    Tuple<Float> t = new Tuple<>(time, sensor, value);
                     dataSource.add(t);
                 }
             }
@@ -71,6 +72,17 @@ public class CSVLoader extends Behavior {
         }
     }
 
+    /**
+     *
+     * @param relativeTime Valeur du temps a chercher dans le CSV
+     * @param noise Borne maximale a ajouter/soustraire du resultatpour créer un
+     * bruit.
+     * @return Si le CSV contient la valeur pour le temps et le sensor demandé
+     * alors retourne la valeur. Si le temps indiqué est entre 2 temps dans le
+     * csv pour ce sensor alors retourne la moyenne entre le temps inférieure et
+     * le temps supérieure au temps demandé. Si le temps demandé est inférieur a
+     * tous les temps dans le csv alors retourne Nan.
+     */
     @Override
     public float createData(float relativeTime, float noise) {
         float result = 0;
@@ -79,16 +91,15 @@ public class CSVLoader extends Behavior {
             boolean valeurTrouve = false;
             for (Tuple d : dataSource) {
                 if (d.getTime() == relativeTime) {
-                    result = d.getValue();
+                    result = (float) d.getValue();
                     valeurTrouve = true;
                 }
             }
             //Si le point n'est pas dans la liste calcul la valeur moyenne entre la valeur precedente et la prochaine valeur
             if (valeurTrouve == false) {
-                Tuple min = null, max = null;
+                Tuple<Float> min = null, max = null;
                 float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
                 for (Tuple d : dataSource) {
-
                     if (valueBefore > relativeTime - d.getTime() && relativeTime - d.getTime() > 0) {
                         valueBefore = relativeTime - d.getTime();
                         min = d;
@@ -97,11 +108,22 @@ public class CSVLoader extends Behavior {
                         max = d;
                     }
                 }
-                result = (min.getValue() + max.getValue()) / 2;
+
+                if (min == null) {
+                    return Float.NaN;
+                } else if (max == null) {
+                    return lastResult;
+                }
+
+                if (min != null && max != null) {
+                    result = (min.getValue() + max.getValue()) / 2;
+                }
             }
+        } else {
+
         }
         float rand = generateNoise(noise);
-        System.out.println("Noise = " + rand);
-        return result + rand;
+        lastResult = result + rand;
+        return lastResult;
     }
 }
