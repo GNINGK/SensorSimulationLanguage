@@ -3,6 +3,7 @@ package main.groovy.dsl
 import main.java.dsl.kernel.definition.Functions
 import main.java.dsl.kernel.definition.Interval
 import main.java.dsl.kernel.definition.IntervalFunctions
+import main.java.dsl.kernel.definition.Polynomial
 import main.java.dsl.kernel.structure.Sensor
 
 abstract class SensorSimBasescript extends Script  {
@@ -23,26 +24,36 @@ abstract class SensorSimBasescript extends Script  {
     }
 
     def law(String name) {
-        List<Double> coeffList = new ArrayList<>()
         [function: { type ->
-            [coefficients: { coeffNb ->
-                int i = 0;
-                while(i < coeffNb){
-                    Double random = new Random().nextDouble()
-                    Double coeff = random
-                    coeffList.add(coeff)
-                    i++
-                }//with 1.0 and 2.0 and 3.0
-                ((SensorSimBinding)this.getBinding()).getSensorSimModel().createLaw(name, type, ((Double[]) coeffList.toArray()))
-            }]
-
-
+            if(((String) type).equals("polynome")) {
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+                def closure
+                closure = { coefficient ->
+                    System.out.print("test: " + (double) coefficient)
+                    ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).addCoefficient((double) coefficient);
+                    [and: closure]
+                }
+                [with: closure]
+            } else if (((String) type).equals("ifs")) {
+                def closure
+                closure = { coefficient ->
+                    ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw(name, "ifs", new Double[0])
+                    [from: { a ->
+                        [to: { b ->
+                            [follows: { lawName ->
+                                ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(new Interval(a, b), ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)))
+                            }]
+                        }]
+                    }]
+                    [and: closure]
+                }
+                [considering: closure]
+            } else if (((String) type).equals("markov")) { }
         }]
     }
 
     // place "name" means actuator becomes signal [and actuator becomes signal]*n
     def sensor(String name) {
-
         [follows: { lawName ->
             [every: { frequency ->
                 ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)), frequency)}

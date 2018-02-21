@@ -8,7 +8,9 @@ import main.java.dsl.kernel.definition.Polynomial;
 import main.java.dsl.kernel.structure.Place;
 import main.java.dsl.kernel.structure.Sensor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,17 +38,18 @@ public class SensorSimModel {
         places.put(name, place);
     }
 
-    public void createLaw(String name, String type, Double[] coefficients) {
+    public void createLaw(String name, String type) {
         Functions law;
+
         switch (type) {
             case "polynome":
-                law = new Polynomial(coefficients, 20);
+                law = new Polynomial(20);
                 break;
             case "ifs":
                 law = new IntervalFunctions();
                 break;
             default:
-                law = new Polynomial(new Double[0], 30);
+                law = new Polynomial(30);
                 break;
         }
 

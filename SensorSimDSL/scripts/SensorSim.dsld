@@ -14,7 +14,9 @@ contribute(currentType(subType('groovy.lang.Script'))) {
 	method type: Script, name: 'and', params: [name:String], doc: 'Define another Place to create'
 
 	method type: Script, name: 'law', params: [name:String], doc: 'Instantiate a law'
+	method type: Script, name: 'with', params: [coefficient:Integer], doc: 'Define polynomial fct first coefficient'
+
 	method type: Script, name: 'function', params: [type:String], doc: 'Type of law'
-	method type: Script, name: 'coefficients', params: [coefficient:Integer], doc: 'Nb of coeff for sensor'
+	method type: Script, name: 'coefficients', params: [coefficient:Integer], doc: 'Nb of coefficient for sensor'
 
 }
