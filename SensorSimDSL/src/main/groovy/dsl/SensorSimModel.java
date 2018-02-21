@@ -45,7 +45,7 @@ public class SensorSimModel {
             case "polynome":
                 law = new Polynomial(0, 20);
                 break;
-            case "ifs":
+            case "interval":
                 law = new IntervalFunctions();
                 break;
             default:

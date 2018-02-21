@@ -26,28 +26,31 @@ abstract class SensorSimBasescript extends Script  {
     def law(String name) {
         [function: { type ->
             if(((String) type).equals("polynome")) {
+                [between: { a->
+                    [and: { b ->
+                        ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+                        ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).setMinMax((double) a, (double) b);
+                        def closure
+                        closure = { coefficient ->
+                            //System.out.print("test: " + (double) coefficient)
+                            ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).addCoefficient((double) coefficient);
+                            [and: closure]
+                        }
+                        [with: closure]
+                    }]
+                }]
+            } else if (((String) type).equals("interval")) {
                 ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
                 def closure
-                closure = { coefficient ->
-                    System.out.print("test: " + (double) coefficient)
-                    ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).addCoefficient((double) coefficient);
-                    [and: closure]
-                }
-                [with: closure]
-            } else if (((String) type).equals("ifs")) {
-                def closure
-                closure = { coefficient ->
-                    ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw(name, "ifs", new Double[0])
+                closure = { lawName ->
                     [from: { a ->
                         [to: { b ->
-                            [follows: { lawName ->
-                                ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(new Interval(a, b), ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)))
-                            }]
+                            ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(new Interval(a, b), ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)))
+                            [and: closure]
                         }]
                     }]
-                    [and: closure]
                 }
-                [considering: closure]
+                [follows: closure]
             } else if (((String) type).equals("markov")) { }
         }]
     }

@@ -28,6 +28,11 @@ public class Polynomial extends Functions {
         polynomialCoefficients.add(coeff);
     }
 
+    public void setMinMax(double min, double max){
+        this.xMin = min;
+        this.xMax = max;
+    }
+
     @Override
     public Float createData(float relativeTime, float noise) {
         float result = 0;

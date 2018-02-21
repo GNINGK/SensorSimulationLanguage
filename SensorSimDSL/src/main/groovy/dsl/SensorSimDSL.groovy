@@ -2,6 +2,7 @@ package main.groovy.dsl
 
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.SecureASTCustomizer
+import static org.codehaus.groovy.syntax.Types.*
 
 class SensorSimDSL {
     private GroovyShell shell
@@ -34,7 +35,9 @@ class SensorSimDSL {
             //language tokens disallowed
 //			tokensBlacklist= []
             //language tokens allowed
-            tokensWhitelist= []
+            tokensWhitelist= [
+                DIVIDE
+            ]
             //types allowed to be used  (including primitive types)
             constantTypesClassesWhiteList= [
                     int, Integer, BigDecimal, Number, Integer.TYPE, String, Object
