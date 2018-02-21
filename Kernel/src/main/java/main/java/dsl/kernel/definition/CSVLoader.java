@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author user
  */
-public class CSVLoader extends Behavior {
+public class CSVLoader extends Behavior<Float> {
 
     List<Tuple> dataSource;
     String pathCSV;
@@ -36,6 +36,9 @@ public class CSVLoader extends Behavior {
         this.timeMin = timeMin;
         if (pathCSV != null) {
             getDataCSV();
+            if (dataSource.isEmpty()) {
+                throw new IllegalArgumentException("");
+            }
         }
 
     }
@@ -81,43 +84,38 @@ public class CSVLoader extends Behavior {
      * tous les temps dans le csv alors retourne Nan.
      */
     @Override
-    public float createData(float relativeTime, float noise) {
+    public Float createData(float relativeTime, float noise) {
         float result = 0;
-        if (!dataSource.isEmpty()) {
-            boolean valeurTrouve = false;
-            for (Tuple d : dataSource) {
-                if (d.getTime() == relativeTime) {
-                    result = (float) d.getValue();
-                    valeurTrouve = true;
-                }
+        boolean valeurTrouve = false;
+        for (Tuple d : dataSource) {
+            if (d.getTime() == relativeTime) {
+                result = (float) d.getValue();
+                valeurTrouve = true;
             }
-            //Si le point n'est pas dans la liste calcul la valeur moyenne entre la valeur precedente et la prochaine valeur
-            if (valeurTrouve == false) {
-                Tuple<Float> min = null, max = null;
-                float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
-                for (Tuple d : dataSource) {
-                    if (valueBefore > relativeTime - d.getTime() && relativeTime - d.getTime() > 0) {
-                        valueBefore = relativeTime - d.getTime();
-                        min = d;
-                    } else if (valueAfter > d.getTime() - relativeTime && d.getTime() - relativeTime > 0) {
-                        valueAfter = d.getTime() - relativeTime;
-                        max = d;
-                    }
-                }
-
-                if (min == null) {
-                    return Float.NaN;
-                } else if (max == null) {
-                    return lastResult;
-                }
-
-                if (min != null && max != null) {
-                    result = (min.getValue() + max.getValue()) / 2;
-                }
-            }
-        } else {
-
         }
+        //Si le point n'est pas dans la liste calcul la valeur moyenne entre la valeur precedente et la prochaine valeur
+        if (valeurTrouve == false) {
+            Tuple<Float> min = null, max = null;
+            float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
+            for (Tuple d : dataSource) {
+                if (valueBefore > relativeTime - d.getTime() && relativeTime - d.getTime() > 0) {
+                    valueBefore = relativeTime - d.getTime();
+                    min = d;
+                } else if (valueAfter > d.getTime() - relativeTime && d.getTime() - relativeTime > 0) {
+                    valueAfter = d.getTime() - relativeTime;
+                    max = d;
+                }
+            }
+
+            if (min == null) {
+                return Float.NaN;
+            } else if (max == null) {
+                return lastResult;
+            }
+
+            result = (min.getValue() + max.getValue()) / 2;
+        }
+
         float rand = generateNoise(noise);
         lastResult = result + rand;
         return lastResult;

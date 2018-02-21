@@ -11,53 +11,31 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Functions function1 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 10.0});
-        Functions function2 = new Polynomial(new Double[]{0.0, 2.0, -1.0 / 5.0});
-
+        //Definition des lois
+        Functions function1 = new Polynomial(new Double[]{2.0, 5.0, -3.0});
         Functions function3 = new Polynomial(new Double[]{5.0});
-        Functions function4 = new Polynomial(new Double[]{0.0});
-
+        Functions function4 = new Polynomial(new Double[]{1.0});
         IntervalFunctions ifs = new IntervalFunctions();
-        Interval i = new Interval(0.0, 40.0);
-        Interval i2 = new Interval(40.0, 60.0);
-        Interval i3 = new Interval(60.0, 100.0);
-        ifs.add(i, function4);
-        ifs.add(i2, function3);
-        ifs.add(i3, function4);
-
+        ifs.add(new Interval(0.0, 10.0), function4);
+        ifs.add(new Interval(11.0, 20.0), function3);
+        ifs.add(new Interval(21.0, 30.0), function4);
         CSVLoader csvLoader = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
-
-        Simulation simulation = new Simulation(100);
-
+        int nbEtat = 2;
+        String[] nameEtat = {"Sunny","Rainy"};
+        float[][] transition = {{0.1f,0.9f},{0.5f,0.5f}};
+        Markov markovLaw = new Markov(nbEtat, 0, nameEtat, transition);
+        markovLaw.setFrequence(5);
+        
+        //Definitions des batiments
         Place batA = new Place("batA");
-        batA.addSensor(new Sensor("sensor0", csvLoader, 1));
-        batA.addSensor(new Sensor("sensor1", function1, 1));
-        batA.addSensor(new Sensor("sensor2", function2, 1));
-        batA.addSensor(new Sensor("sensor3", ifs, 1));
-
+        
+        //Definition de la simulation
+        Simulation simulation = new Simulation(30);
+        //batA.addSensor(new Sensor<>("sensor0", csvLoader, 1));
+        batA.addSensor(new Sensor<>("sensor0", markovLaw, 1));
         simulation.addPlaces(batA);
 
         simulation.run();
-
-        /*CSVLoader csvLoader = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
-        System.out.println("0 : " + csvLoader.createData(0, 0));
-        System.out.println("1 : " + csvLoader.createData(1, 0));
-        System.out.println("2 : " + csvLoader.createData(2, 0));
-        System.out.println("3 : " + csvLoader.createData(3, 0));
-        /*
-        Simulation simulation = new Simulation(100);
-        Place batA = new Place();
-        batA.setName("batA");
-
-        List<Sensor> listC = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            listC.add(new Sensor("sensor" + i, csvLoader, 1));
-        }
-
-        batA.addSensors(listC);
-        simulation.addPlaces(batA);
-
-        simulation.run();*/
     }
 
 }

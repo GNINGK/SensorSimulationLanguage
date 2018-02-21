@@ -3,9 +3,9 @@ package main.java.dsl.kernel.definition;
 /**
  * @author Maxime
  */
-public abstract class Behavior {
+public abstract class Behavior< T > {
 
-    public abstract float createData(float relativeTime, float noise);
+    public abstract T createData(float relativeTime, float noise);
     /***
      * Genere un bruit avec comme valeur max noise avec 33% de chance d'etre negatif/null/positif
      * @param noise Borne du bruit qui va etre ajoute/

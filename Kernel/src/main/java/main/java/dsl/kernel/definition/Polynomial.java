@@ -13,7 +13,7 @@ public class Polynomial extends Functions {
     }
 
     @Override
-    public float createData(float relativeTime, float noise) {
+    public Float createData(float relativeTime, float noise) {
         float result = 0;
         for (int i = 0; i < polynome.length; i++) {
             if (i == 0) {

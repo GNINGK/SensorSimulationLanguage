@@ -13,7 +13,7 @@ public class IntervalFunctions extends Functions {
     private HashMap<Interval, Functions> listIntervals = new HashMap<>();
 
     @Override
-    public float createData(float instantT, float noise) {
+    public Float createData(float instantT, float noise) {
 
         float result = Float.NaN;
         for (Entry<Interval, Functions> entry : listIntervals.entrySet()) {
