@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * @author Maxime
  */
@@ -94,7 +93,6 @@ public class Simulation implements NamedElement {
         this.totalTime = totalTime;
     }
 
-
     public void run() {
         for (Place l : this.places) {
             List<Sensor> sensors = l.getSensors();
@@ -102,8 +100,11 @@ public class Simulation implements NamedElement {
                 for (int i = 0; i < this.totalTime; i++) {
                     if (i % sensor.getEchantillonnage() == 0) {
                         long t = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
-                        System.out.println("Sensor:"+sensor.getName()+"; time:" + i + "; value:" + sensor.generationDonnees(i));
-                        //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+                        float result = (float) sensor.generationDonnees(i);
+                        if (!Float.isNaN(result)) {
+                            System.out.println("Sensor:"+sensor.getName()+"; time:" + i + "; value:" + sensor.generationDonnees(i));
+                            //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+                        }
                     }
                 }
             }
