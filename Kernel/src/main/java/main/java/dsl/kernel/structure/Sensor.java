@@ -9,17 +9,21 @@ import main.java.dsl.kernel.definition.Behavior;
  *
  * @author Maxime
  */
-public class Sensor implements NamedElement {
+public class Sensor<T> implements NamedElement {
 
     private String name;
     private Behavior law;
     private int echantillonnage;
-    private float lastValue;
+    private T lastValue;
 
     public Sensor(String name, Behavior law, int echantillonnage) {
         this.name = name;
         this.law = law;
-        this.echantillonnage = echantillonnage;
+        if (echantillonnage > 0) {
+            this.echantillonnage = echantillonnage;
+        } else {
+            this.echantillonnage = 1;//par defaut
+        }
     }
 
     @Override
@@ -46,9 +50,9 @@ public class Sensor implements NamedElement {
         this.law = law;
     }
 
-    public float generationDonnees(int relativeTime) {
+    public T generationDonnees(int relativeTime) {
         if (relativeTime % echantillonnage == 0) {
-            float temp = law.createData(relativeTime, 0);
+            T temp = (T) law.createData(relativeTime, 0);
             lastValue = temp;
             return temp;
         } else {

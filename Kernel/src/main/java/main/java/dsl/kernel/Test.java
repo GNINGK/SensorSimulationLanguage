@@ -26,15 +26,19 @@ public class Test {
         ifs.add(i3, function4);
 
         CSVLoader csvLoader = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
+        int nbEtat = 2;
+        String[] nameEtat = {"Sunny","Rainy"};
+        float[][] transition = {{0.1f,0.9f},{0.5f,0.5f}};
+        Markov markovLaw = new Markov(nbEtat, 0, nameEtat, transition);
+        markovLaw.setFrequence(5);
 
-        Simulation simulation = new Simulation(100);
-
+        //Definitions des batiments
         Place batA = new Place("batA");
-        batA.addSensor(new Sensor("sensor0", csvLoader, 1));
-        batA.addSensor(new Sensor("sensor1", function1, 1));
-        batA.addSensor(new Sensor("sensor2", function2, 1));
-        batA.addSensor(new Sensor("sensor3", ifs, 1));
 
+        //Definition de la simulation
+        Simulation simulation = new Simulation(30);
+        //batA.addSensor(new Sensor<>("sensor0", csvLoader, 1));
+        batA.addSensor(new Sensor<>("sensor0", markovLaw, 1));
         simulation.addPlaces(batA);
 
         simulation.run();
