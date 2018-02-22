@@ -15,8 +15,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        // Définitions des batiments
-        Place batA = new Place("batA");
+
 
         // Définitions des fonctions
         Functions function1 = new Polynomial(new ArrayList<>(
@@ -35,14 +34,6 @@ public class Test {
         function_interval.add(i2, function2);
         function_interval.add(i3, function3);
 
-        batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
-
-        // CSV
-        CSVLoader function_csv = new CSVLoader("dataSource.csv", "sensor0", 0, 10);
-
-        batA.addSensor(new Sensor("sensor_csv", function_csv, 1));
-
-        // MARKOV
         int nbEtat = 2;
         List<String> nameEtat = new ArrayList<>(
                 Arrays.asList("Sunny", "Rainy"));
@@ -52,21 +43,33 @@ public class Test {
         Markov function_markov = new Markov(nbEtat, 0, nameEtat, transition);
         function_markov.setFrequency(5);
 
-        batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
+        FileLoader csvLoader = new FileLoader("resultat.csv", "sensor0", 0, 10);
+        FileLoader jsonLoader = new FileLoader("resultat.json", "sensor0", 0, 10);
+
+        Place batA = new Place();
+        function_markov.setFrequency(5);
+
+        //batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
 
         //Definition de la simulation
         Simulation simulation = new Simulation(30);
 
-        batA.addSensor(new Sensor<>("sensor_markov", function_markov, 1));
-
-        batA.addSensor(new Sensor("sensor_csv", function_csv, 1));
-        batA.addSensor(new Sensor("sensor1", function1, 1));
-        batA.addSensor(new Sensor("sensor2", function2, 1));
-        batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
+        //batA.addSensor(new Sensor<>("sensor_markov", function_markov, 1));
+        //batA.addSensor(new Sensor("sensor0", jsonLoader, 1));
+        //batA.addSensor(new Sensor("sensor1", csvLoader, 1));
+        batA.addSensor(new Sensor("sensor2", function3, 1));
+        //batA.addSensor(new Sensor("sensor2", function2, 1));
+        //batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
 
         simulation.addPlaces(batA);
 
         simulation.run();
+
+        //Test load CSV and JSON
+        /*FileLoader csvLoader = new FileLoader("resultat.csv", "sensor0", 0, 10);
+        System.out.println(csvLoader.getDataSource().toString());
+        FileLoader jsonLoader = new FileLoader("resultat.json", "sensor0", 0, 10);
+        System.out.println(jsonLoader.getDataSource().toString());*/
     }
 
 }
