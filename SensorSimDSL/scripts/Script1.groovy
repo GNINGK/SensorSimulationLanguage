@@ -21,6 +21,6 @@ add 1 sensors "sensor2" to "buildingA"
 
 add 1 sensors "sensor_interval" to "buildingB"
 //add 1 sensors "sensor_csv" to "buildingB"
-add 1 sensors "sensor_markov" to "buildingB"
+//add 1 sensors "sensor_markov" to "buildingB"
 
 launch "simulation1"
