@@ -6,6 +6,7 @@ import main.java.dsl.kernel.structure.Sensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Maxime
@@ -18,12 +19,12 @@ public class Test {
         Place batA = new Place("batA");
 
         // Définitions des fonctions
-        Functions function1 = new Polynomial(new ArrayList<Double>(
+        Functions function1 = new Polynomial(new ArrayList<>(
                 Arrays.asList(0.0, 2.0, -1.0 / 10.0)), 0, 20);
-        Functions function2 = new Polynomial(new ArrayList<Double>(
+        Functions function2 = new Polynomial(new ArrayList<>(
                 Arrays.asList(0.0, 2.0, -1.0 / 5.0)), 0, 10);
 
-        Functions function3 = new Polynomial(new ArrayList<Double>(
+        Functions function3 = new Polynomial(new ArrayList<>(
                 Arrays.asList(10.0, 0.0, -1.0 / 10.0)), -10, 10);
 
         IntervalFunctions function_interval = new IntervalFunctions();
@@ -43,10 +44,13 @@ public class Test {
 
         // MARKOV
         int nbEtat = 2;
-        String[] nameEtat = {"Sunny", "Rainy"};
-        float[][] transition = {{0.1f, 0.9f}, {0.5f, 0.5f}};
+        List<String> nameEtat = new ArrayList<>(
+                Arrays.asList("Sunny", "Rainy"));
+        List<float[]> transition = new ArrayList<>(
+                Arrays.asList(new float[]{0.1f, 0.9f}, new float[]{0.5f, 0.5f}));
+
         Markov function_markov = new Markov(nbEtat, 0, nameEtat, transition);
-        function_markov.setFrequence(5);
+        function_markov.setFrequency(5);
 
         batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
 

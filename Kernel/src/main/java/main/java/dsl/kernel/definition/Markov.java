@@ -1,46 +1,56 @@
 package main.java.dsl.kernel.definition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Maxime
  */
 public class Markov extends Behavior<String> {
 
-    private float[][] transitionMatrix;
-    private int frequence = 1;
-    int etatInitial;
-    String[] nameState;
-    int nbEtat;
+    private List<float[]> transitionMatrix;
+    private int frequency = 1;
+    int initialState;
+    List<String> statesName;
+    int statesNb;
+
+
+    public Markov() {
+        this.statesNb = 0;
+        this.transitionMatrix = new ArrayList<>();
+        this.statesName = new ArrayList<>();
+    }
 
     /**
      *
-     * @param nbEtat nb etat
-     * @param etatInitial numero de l'etat initial dans la matrice
-     * @param nameState nom de tous les etats
+     * @param statesNb nb etat
+     * @param initialState numero de l'etat initial dans la matrice
+     * @param statesName nom de tous les etats
      */
-    public Markov(int nbEtat, int etatInitial, String[] nameState, float[][] transitionMatrix) {
-        this.nbEtat = nbEtat;
+    public Markov(int statesNb, int initialState, List<String> statesName, List<float[]> transitionMatrix) {
+        this.statesNb = statesNb;
         this.transitionMatrix = transitionMatrix;
-        this.etatInitial = etatInitial;
-        this.nameState = nameState;
+        this.initialState = initialState;
+        this.statesName = statesName;
     }
 
     @Override
     public String createData(float relativeTime, float noise) {
         String result = "";
-        if (relativeTime % frequence == 0) {
+        if (relativeTime % frequency == 0) {
             double r = Math.random();
             double sum = 0.0;
             // determine next state 
-            for (int j = 0; j < nbEtat; j++) {
-                sum += transitionMatrix[etatInitial][j];
+            for (int j = 0; j < statesNb; j++) {
+                sum += transitionMatrix.get(initialState)[j];
                 if (r <= sum) {
-                    etatInitial = j;
-                    result = nameState[etatInitial];
+                    initialState = j;
+                    result = statesName.get(initialState);
                     break;
                 }
             }
         } else {
-            return nameState[etatInitial];
+            return statesName.get(initialState);
         }
         return result;
     }
@@ -48,21 +58,28 @@ public class Markov extends Behavior<String> {
     /**
      * @param transitionMatrix the transitionMatrix to set
      */
-    public void setTransitionMatrix(float[][] transitionMatrix) {
+    public void setTransitionMatrix(List<float[]> transitionMatrix) {
         this.transitionMatrix = transitionMatrix;
     }
 
     /**
-     * @return the frequence
+     * @return the frequency
      */
-    public int getFrequence() {
-        return frequence;
-    }
+    public int getFrequency() { return frequency; }
 
     /**
-     * @param frequence the frequence to set
+     * @param frequency the frequency to set
      */
-    public void setFrequence(int frequence) {
-        this.frequence = frequence;
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
+
+    public void addState(String stateName, float[] matrix) {
+        this.statesName.add(stateName);
+        this.transitionMatrix.add(matrix);
+        if(this.statesNb == 0)
+            this.initialState = 1;
+        this.statesNb++;
+    }
+
 }

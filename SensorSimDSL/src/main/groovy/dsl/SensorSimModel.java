@@ -2,9 +2,7 @@ package main.groovy.dsl;
 
 import groovy.lang.Binding;
 import main.java.dsl.kernel.Simulation;
-import main.java.dsl.kernel.definition.Functions;
-import main.java.dsl.kernel.definition.IntervalFunctions;
-import main.java.dsl.kernel.definition.Polynomial;
+import main.java.dsl.kernel.definition.*;
 import main.java.dsl.kernel.structure.Place;
 import main.java.dsl.kernel.structure.Sensor;
 
@@ -39,7 +37,7 @@ public class SensorSimModel {
     }
 
     public void createLaw(String name, String type) {
-        Functions law;
+        Behavior law;
 
         switch (type) {
             case "polynome":
@@ -47,6 +45,9 @@ public class SensorSimModel {
                 break;
             case "interval":
                 law = new IntervalFunctions();
+                break;
+            case "markov":
+                law = new Markov();
                 break;
             default:
                 law = new Polynomial(0, 30);
@@ -56,8 +57,8 @@ public class SensorSimModel {
         this.binding.setVariable(name, law);
     }
 
-    public void createSensor(String sensorName, Functions function, int samples) {
-        Sensor sensor = new Sensor(sensorName, function, samples);
+    public void createSensor(String sensorName, Behavior behavior, int samples) {
+        Sensor sensor = new Sensor(sensorName, behavior, samples);
         sensor.setName(sensorName);
 
         this.binding.setVariable(sensorName, sensor);

@@ -1,8 +1,10 @@
 package main.groovy.dsl
 
+import main.java.dsl.kernel.definition.Behavior
 import main.java.dsl.kernel.definition.Functions
 import main.java.dsl.kernel.definition.Interval
 import main.java.dsl.kernel.definition.IntervalFunctions
+import main.java.dsl.kernel.definition.Markov
 import main.java.dsl.kernel.definition.Polynomial
 import main.java.dsl.kernel.structure.Sensor
 
@@ -51,7 +53,23 @@ abstract class SensorSimBasescript extends Script  {
                     }]
                 }
                 [follows: closure]
-            } else if (((String) type).equals("markov")) { }
+            } else if (((String) type).equals("markov")) {
+                //function "markov" freq 5 with "Sunny" parameters 0.1 and 0.9 state "Rainy" parameters0.5 and 0.5
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+                [frequency: { freq ->
+                    ((Markov) ((SensorSimBinding) this.getBinding()).getVariable(name)).setFrequency((int) freq)
+                    def closure
+                    closure = { state ->
+                        def closure1
+                        closure1 = { matrix ->
+                            ((Markov) ((SensorSimBinding) this.getBinding()).getVariable(name)).addState((String) state, (float[]) matrix)
+                            [and: closure]
+                        }
+                        [parameters: closure1]
+                    }
+                    [with: closure]
+                }]
+            }
         }]
     }
 
@@ -59,7 +77,7 @@ abstract class SensorSimBasescript extends Script  {
     def sensor(String name) {
         [follows: { lawName ->
             [every: { frequency ->
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)), frequency)}
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Behavior) ((SensorSimBinding) this.getBinding()).getVariable(lawName)), frequency)}
             ]
         }]
     }
