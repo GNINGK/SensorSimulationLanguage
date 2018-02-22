@@ -20,37 +20,57 @@ import org.json.JSONObject;
 public class FileLoader extends Behavior<Float> {
 
     private List<Tuple> dataSource;
-    String pathFile;
+    String filePath;
     String sensorName;
     long timeMin = -1;
     long timeMax = -1;
     float lastResult = 0;
 
-    public FileLoader(String pathFile, String sensorName) {
+    public FileLoader() {
         dataSource = new ArrayList<>();
-        this.pathFile = pathFile;
+    }
+
+    public FileLoader(String filePath, String sensorName) {
+        dataSource = new ArrayList<>();
+        this.filePath = filePath;
         this.sensorName = sensorName;
-        if (pathFile != null) {
+        if (filePath != null) {
             getFile();
         }
     }
 
-    public FileLoader(String pathFile, String sensorName, int timeMin, int timeMax) {
+    public FileLoader(String filePath, String sensorName, int timeMin, int timeMax) {
         dataSource = new ArrayList<>();
-        this.pathFile = pathFile;
+        this.filePath = filePath;
         this.sensorName = sensorName;
         this.timeMax = timeMax;
         this.timeMin = timeMin;
-        if (pathFile != null) {
+        if (filePath != null) {
             getFile();
         }
+    }
+
+    public void addPath(String filePath){
+        this.filePath = filePath;
+        if (this.filePath != null) {
+            getFile();
+        }
+    }
+
+    public void setSensorName(String sensorName){
+        this.sensorName = sensorName;
+    }
+
+    public void setTimeMinMax(long min, long max){
+        this.timeMin = min;
+        this.timeMax = max;
     }
 
     private void getFile() {
         Pattern csv = Pattern.compile(".*.csv"); 
         Pattern json = Pattern.compile(".*.json"); 
-        Matcher mcsv = csv.matcher(pathFile) ; 
-        Matcher mjson = json.matcher(pathFile) ; 
+        Matcher mcsv = csv.matcher(filePath) ;
+        Matcher mjson = json.matcher(filePath) ;
         if (mcsv.find()) {
             getDataCSV();
         } else if (mjson.find()) {
@@ -66,7 +86,7 @@ public class FileLoader extends Behavior<Float> {
 
     private void getdataJSON() {
 
-        File file = new File(pathFile);
+        File file = new File(filePath);
         if (file.isFile()) {
             JSONArray jsonArray = new JSONArray(loadFile(file));
             JSONObject jsonObject = null;
@@ -107,7 +127,7 @@ public class FileLoader extends Behavior<Float> {
         String[] tuple = null;
         try {
             String filePath = new File("").getAbsolutePath();
-            buffer = new BufferedReader(new FileReader(pathFile));
+            buffer = new BufferedReader(new FileReader(this.filePath));
 
             String line;
             while ((line = buffer.readLine()) != null) {

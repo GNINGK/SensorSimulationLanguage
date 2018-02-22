@@ -49,6 +49,9 @@ public class SensorSimModel {
             case "markov":
                 law = new Markov();
                 break;
+            case "csv":
+                law = new FileLoader();
+                break;
             default:
                 law = new Polynomial(0, 30);
                 break;

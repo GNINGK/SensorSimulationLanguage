@@ -1,6 +1,7 @@
 package main.groovy.dsl
 
 import main.java.dsl.kernel.definition.Behavior
+import main.java.dsl.kernel.definition.FileLoader
 import main.java.dsl.kernel.definition.Functions
 import main.java.dsl.kernel.definition.Interval
 import main.java.dsl.kernel.definition.IntervalFunctions
@@ -54,7 +55,6 @@ abstract class SensorSimBasescript extends Script  {
                 }
                 [follows: closure]
             } else if (((String) type).equals("markov")) {
-                //function "markov" freq 5 with "Sunny" parameters 0.1 and 0.9 state "Rainy" parameters0.5 and 0.5
                 ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
                 [frequency: { freq ->
                     ((Markov) ((SensorSimBinding) this.getBinding()).getVariable(name)).setFrequency((int) freq)
@@ -69,7 +69,22 @@ abstract class SensorSimBasescript extends Script  {
                     }
                     [with: closure]
                 }]
+            } else if (((String) type).equals("csv")) {
+            ////from "dataSource.csv" with "sensor0" between 0 and 10
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+                [from: { source ->
+                    [with: { sensorName ->
+                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).addPath((String) source)
+                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName((String) sensorName)
+                        [between: { a ->
+                            [and: { b ->
+                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setTimeMinMax((long) a, (long) b)
+                            }]
+                        }]
+                    }]
+                }]
             }
+
         }]
     }
 
