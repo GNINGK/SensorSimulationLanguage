@@ -50,13 +50,6 @@ public class FileLoader extends Behavior<Float> {
         }
     }
 
-    public void addPath(String filePath){
-        this.filePath = filePath;
-        if (this.filePath != null) {
-            getFile();
-        }
-    }
-
     public void setSensorName(String sensorName){
         this.sensorName = sensorName;
     }
