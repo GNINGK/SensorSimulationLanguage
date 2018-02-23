@@ -15,8 +15,10 @@ public class Sensor<T> implements NamedElement {
     private Behavior law;
     private int echantillonnage;
     private T lastValue;
+    private float noise;
 
     public Sensor(String name, Behavior law, int echantillonnage) {
+        this.noise = 0;
         this.name = name;
         this.law = law;
         if (echantillonnage > 0) {
@@ -52,7 +54,7 @@ public class Sensor<T> implements NamedElement {
 
     public T generationDonnees(int relativeTime) {
         if (relativeTime % echantillonnage == 0) {
-            T temp = (T) law.createData(relativeTime, 0);
+            T temp = (T) law.createData(relativeTime, this.noise);
             lastValue = temp;
             return temp;
         } else {
@@ -72,6 +74,20 @@ public class Sensor<T> implements NamedElement {
      */
     public void setEchantillonnage(int echantillonnage) {
         this.echantillonnage = echantillonnage;
+    }
+
+    /**
+     * @return the noise
+     */
+    public float getNoise() {
+        return noise;
+    }
+
+    /**
+     * @param noise the noise to set
+     */
+    public void setNoise(float noise) {
+        this.noise = noise;
     }
 
 }

@@ -50,20 +50,20 @@ public class FileLoader extends Behavior<Float> {
         }
     }
 
-    public void setSensorName(String sensorName){
+    public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
     }
 
-    public void setTimeMinMax(long min, long max){
+    public void setTimeMinMax(long min, long max) {
         this.timeMin = min;
         this.timeMax = max;
     }
 
     private void getFile() {
-        Pattern csv = Pattern.compile(".*.csv"); 
-        Pattern json = Pattern.compile(".*.json"); 
-        Matcher mcsv = csv.matcher(filePath) ;
-        Matcher mjson = json.matcher(filePath) ;
+        Pattern csv = Pattern.compile(".*.csv");
+        Pattern json = Pattern.compile(".*.json");
+        Matcher mcsv = csv.matcher(filePath);
+        Matcher mjson = json.matcher(filePath);
         if (mcsv.find()) {
             getDataCSV();
         } else if (mjson.find()) {
@@ -86,9 +86,8 @@ public class FileLoader extends Behavior<Float> {
             for (int j = 0; j < jsonArray.length(); j++) {
                 jsonObject = jsonArray.getJSONObject(j);
                 String sensor = jsonObject.getString("sensorName");
-                if (sensor.equals(sensorName))
-                {
-                    Tuple<Float> t = new Tuple<>(jsonObject.getInt("time"), sensor, (float)jsonObject.getDouble("value"));
+                if (sensor.equals(sensorName)) {
+                    Tuple<Float> t = new Tuple<>(jsonObject.getInt("time"), sensor, (float) jsonObject.getDouble("value"));
                     getDataSource().add(t);
                 }
             }
@@ -119,9 +118,7 @@ public class FileLoader extends Behavior<Float> {
         BufferedReader buffer = null;
         String[] tuple = null;
         try {
-            String filePath = new File("").getAbsolutePath();
             buffer = new BufferedReader(new FileReader(this.filePath));
-
             String line;
             while ((line = buffer.readLine()) != null) {
                 tuple = line.split(",");
