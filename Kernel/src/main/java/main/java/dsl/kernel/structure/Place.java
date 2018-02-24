@@ -4,22 +4,30 @@ import main.java.dsl.kernel.NamedElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import main.java.dsl.kernel.definition.AggregatingLaw;
+import main.java.dsl.kernel.definition.Tuple;
 
 /**
  * @author Maxime
  */
-public class Place implements NamedElement {
+public class Place<T> implements NamedElement {
 
     private String name;
     private List<Sensor> sensors;
+    private AggregatingLaw aggregLaw;
+    private int totalTime;
 
     public Place() {
         this.sensors = new ArrayList<>();
+        aggregLaw = null;
+        totalTime = 0;
     }
 
     public Place(String name) {
         this.name = name;
         this.sensors = new ArrayList<>();
+        aggregLaw = null;
+        totalTime = 0;
     }
 
     @Override
@@ -55,6 +63,73 @@ public class Place implements NamedElement {
 
     public void addSensors(List<Sensor> cap) {
         sensors.addAll(cap);
+    }
+
+    public List<Tuple> getDatasSensor() {
+
+        if (aggregLaw != null) {
+            return compositeSensor();
+        } else {
+            return classicSensor();
+        }
+    }
+
+    public List<Tuple> classicSensor() {
+        List<Tuple> result = new ArrayList<>();
+        for (int i = 0; i < this.getTotalTime(); i++) {
+            for (Sensor s : sensors) {
+                if (i % s.getEchantillonnage() == 0) {
+                    long t = System.currentTimeMillis() - this.getTotalTime() * 1000 + i * 1000;
+                    result.add(new Tuple(t, s.getName(), s.generationDonnees(i)));
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Tuple> compositeSensor() {
+        List<Tuple> result = new ArrayList<>();
+        for (int i = 0; i < this.getTotalTime(); i++) {
+            List<Tuple> listTemp = new ArrayList<>();
+            for (Sensor s : sensors) {
+                if (i % s.getEchantillonnage() == 0) {
+
+                    listTemp.add(new Tuple(i, s.getName(), s.generationDonnees(i)));
+                }
+
+            }
+            long t = System.currentTimeMillis() - this.getTotalTime() * 1000 + i * 1000;
+            result.add(new Tuple(t, "compositeSensor" + getName(), aggregLaw.aggregate(listTemp)));
+        }
+        return result;
+    }
+
+    /**
+     * @return the aggregLaw
+     */
+    public AggregatingLaw getAggregLaw() {
+        return aggregLaw;
+    }
+
+    /**
+     * @param aggregLaw the aggregLaw to set
+     */
+    public void setAggregLaw(AggregatingLaw aggregLaw) {
+        this.aggregLaw = aggregLaw;
+    }
+
+    /**
+     * @return the totalTime
+     */
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    /**
+     * @param totalTime the totalTime to set
+     */
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
     }
 
 }

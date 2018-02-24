@@ -15,8 +15,6 @@ public class Test {
 
     public static void main(String[] args) {
 
-
-
         // Définitions des fonctions
         Functions function1 = new Polynomial(new ArrayList<>(
                 Arrays.asList(0.0, 2.0, -1.0 / 10.0)), 0, 20);
@@ -46,22 +44,34 @@ public class Test {
         FileLoader csvLoader = new FileLoader("resultat.csv", "sensor0", 0, 10);
         FileLoader jsonLoader = new FileLoader("resultat.json", "sensor0", 0, 10);
 
-        Place batA = new Place();
-        function_markov.setFrequency(5);
-
         //batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
-
         //Definition de la simulation
         Simulation simulation = new Simulation(30);
 
         //batA.addSensor(new Sensor<>("sensor_markov", function_markov, 1));
         //batA.addSensor(new Sensor("sensor0", jsonLoader, 1));
-        batA.addSensor(new Sensor("sensor1", csvLoader, 1));
         //batA.addSensor(new Sensor("sensor2", function3, 1));
         //batA.addSensor(new Sensor("sensor2", function2, 1));
         //batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
 
-        simulation.addPlaces(batA);
+        
+        //Sensor normal
+        Place batA = new Place();
+        Sensor s = new Sensor("sensor1", csvLoader, 1);
+        Sensor s2 = new Sensor("sensor2", jsonLoader, 1);
+        batA.addSensor(s);
+        batA.addSensor(s2);
+        //Sensor composite
+        Place batB = new Place();
+        batB.setName("BatB");
+        AggregatingLaw  compositeLaw = new SumAggregating();
+        batB.setAggregLaw(compositeLaw);
+        Sensor s3 = new Sensor("sensor1", csvLoader, 1);
+        Sensor s4 = new Sensor("sensor2", jsonLoader, 1);
+        batB.addSensor(s3);
+        batB.addSensor(s4);
+        
+        simulation.addPlaces(batB);
 
         simulation.run();
 

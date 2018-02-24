@@ -95,19 +95,16 @@ public class Simulation implements NamedElement {
 
     public void run() {
         for (Place l : this.places) {
-            List<Sensor> sensors = l.getSensors();
-            for (Sensor sensor : sensors) {
-                for (int i = 0; i < this.totalTime; i++) {
-                    if (i % sensor.getEchantillonnage() == 0) {
-                        long t = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
-                        float result = (float) sensor.generationDonnees(i);
-                        if (!Float.isNaN(result)) {
-                            System.out.println("Sensor:"+sensor.getName()+"; time:" + i + "; value:" + sensor.generationDonnees(i));
-                            //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
-                        }
-                    }
-                }
+            if(l.getTotalTime() != this.totalTime)
+            {
+                l.setTotalTime(totalTime);
             }
+            List<Tuple> result = l.getDatasSensor();
+            for(Tuple t : result)
+            {
+                System.out.println("Sensor:" + t.getSensor() + "; time:" + t.getTime() + "; value:" + t.getValue());
+                //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+            }  
         }
     }
 
