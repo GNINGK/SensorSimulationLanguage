@@ -74,7 +74,7 @@ abstract class SensorSimBasescript extends Script  {
                 ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
                 [from: { source ->
                     [with: { sensorName ->
-                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).addPath((String) source)
+                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath((String) source)
                         ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName((String) sensorName)
                         [between: { a ->
                             [and: { b ->
@@ -92,7 +92,7 @@ abstract class SensorSimBasescript extends Script  {
     def sensor(String name) {
         [follows: { lawName ->
             [every: { frequency ->
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Behavior) ((SensorSimBinding) this.getBinding()).getVariable(lawName)), frequency)}
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Behavior) ((SensorSimBinding) this.getBinding()).getVariable((String) lawName)), (int) frequency)}
             ]
         }]
     }

@@ -35,11 +35,12 @@ public class Simulation implements NamedElement {
         initDB("http://localhost:8086", "sensors_database");
 
         this.places = new ArrayList<>();
+        this.totalTime = 30;
     }
 
     public Simulation(int totalTime) {
         BasicConfigurator.configure();
-        //initDB("http://localhost:8086", "sensors_database");
+        initDB("http://localhost:8086", "sensors_database");
         this.places = new ArrayList<>();
 
         this.totalTime = totalTime;
@@ -94,16 +95,18 @@ public class Simulation implements NamedElement {
     }
 
     public void run() {
-        for (Place l : this.places) {
-            List<Sensor> sensors = l.getSensors();
+        for (Place place : this.places) {
+            List<Sensor> sensors = place.getSensors();
+            String placeName = place.getName();
             for (Sensor sensor : sensors) {
                 for (int i = 0; i < this.totalTime; i++) {
-                    if (i % sensor.getEchantillonnage() == 0) {
-                        long t = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
-                        float result = (float) sensor.generationDonnees(i);
-                        if (!Float.isNaN(result)) {
-                            System.out.println("Sensor:"+sensor.getName()+"; time:" + i + "; value:" + sensor.generationDonnees(i));
-                            //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+                    if (i % sensor.getSampling() == 0) {
+                        long time = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
+                        Object data = sensor.generateData(i);
+                        if ( (data instanceof Float && !Float.isNaN((float) data)) || data instanceof String) {
+                            System.out.println("Sensor: " + sensor.getName() + ", at place: " + placeName +
+                                    ", time: " + i + ", value: " + sensor.generateData(i));
+                            saveToDB(new Tuple(time, sensor.getName(), placeName, data));
                         }
                     }
                 }
@@ -146,12 +149,18 @@ public class Simulation implements NamedElement {
     }
 
     private void saveToDB(Tuple tuple) {
-        float value = tuple.getValue() instanceof String ? ((String) tuple.getValue()).charAt(0) : (float) tuple.getValue();
-
-        influxDB.write(Point.measurement(tuple.getSensor())
-                .time(tuple.getTime(), TimeUnit.MILLISECONDS)
-                .addField("value", value)
-                .build());
+        Object value = tuple.getValue();
+        if(value instanceof String ) {
+            influxDB.write(Point.measurement(tuple.getPlaceName() + "_infos")
+                    .time(tuple.getTime(), TimeUnit.MILLISECONDS)
+                    .addField("info", (String) value)
+                    .build());
+        } else {
+            influxDB.write(Point.measurement(tuple.getPlaceName() + "_datas")
+                    .time(tuple.getTime(), TimeUnit.MILLISECONDS)
+                    .addField("value", (float) value)
+                    .build());
+        }
 
     }
 

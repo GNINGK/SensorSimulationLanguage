@@ -6,9 +6,7 @@ import main.java.dsl.kernel.definition.*;
 import main.java.dsl.kernel.structure.Place;
 import main.java.dsl.kernel.structure.Sensor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -75,7 +73,7 @@ public class SensorSimModel {
     public void addSensors(String placeName, Sensor sensor, int sensorNb) {
         int i = 0;
         while (i < sensorNb) {
-            Sensor sensorCopy = new Sensor(sensor.getName() + "_" + i, sensor.getLaw(), sensor.getEchantillonnage());
+            Sensor sensorCopy = new Sensor(sensor.getName() + "_" + i, sensor.getLaw(), sensor.getSampling());
             addSensor(placeName, sensorCopy);
             i++;
         }

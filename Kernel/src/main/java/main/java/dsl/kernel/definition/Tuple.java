@@ -8,17 +8,17 @@ public class Tuple<T> {
     private long time;
     private T value;
     private String sensor;
+    private String placeName;
 
-    public Tuple(long time, String sensor, T value) {
+    public Tuple(long time, String sensor, String placeName, T value) {
         this.time = time;
         this.value = value;
         this.sensor = sensor;
+        this.placeName = placeName;
     }
 
     @Override
-    public String toString() {
-        return time + "," + sensor + "," + value;
-    }
+    public String toString() { return time + ", at " + placeName + ", " + sensor + "," + value; }
 
     /**
      * @return the time
@@ -61,4 +61,15 @@ public class Tuple<T> {
     public void setSensor(String sensor) {
         this.sensor = sensor;
     }
+
+    /**
+     * @return the sensor position
+     */
+    public String getPlaceName(){ return placeName; }
+
+    /**
+     * @param placeName the sensor position
+     */
+    public void setPlaceName(String placeName){ this.placeName = placeName; }
+
 }

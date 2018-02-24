@@ -13,16 +13,16 @@ public class Sensor<T> implements NamedElement {
 
     private String name;
     private Behavior law;
-    private int echantillonnage;
+    private int sampling;
     private T lastValue;
 
-    public Sensor(String name, Behavior law, int echantillonnage) {
+    public Sensor(String name, Behavior law, int sampling) {
         this.name = name;
         this.law = law;
-        if (echantillonnage > 0) {
-            this.echantillonnage = echantillonnage;
+        if (sampling > 0) {
+            this.sampling = sampling;
         } else {
-            this.echantillonnage = 1;//par defaut
+            this.sampling = 1;
         }
     }
 
@@ -50,28 +50,28 @@ public class Sensor<T> implements NamedElement {
         this.law = law;
     }
 
-    public T generationDonnees(int relativeTime) {
-        if (relativeTime % echantillonnage == 0) {
-            T temp = (T) law.createData(relativeTime, 0);
-            lastValue = temp;
-            return temp;
+    public T generateData(int relativeTime) {
+        if (relativeTime % sampling == 0) {
+            T newData = (T) law.createData(relativeTime, 0);
+            lastValue = newData;
+            return newData;
         } else {
             return lastValue;
         }
     }
 
     /**
-     * @return the echantillonnage
+     * @return the sampling
      */
-    public int getEchantillonnage() {
-        return echantillonnage;
+    public int getSampling() {
+        return sampling;
     }
 
     /**
-     * @param echantillonnage the echantillonnage to set
+     * @param sampling the sampling to set
      */
-    public void setEchantillonnage(int echantillonnage) {
-        this.echantillonnage = echantillonnage;
+    public void setSampling(int sampling) {
+        this.sampling = sampling;
     }
 
 }

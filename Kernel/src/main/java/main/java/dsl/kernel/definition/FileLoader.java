@@ -20,11 +20,11 @@ import org.json.JSONObject;
 public class FileLoader extends Behavior<Float> {
 
     private List<Tuple> dataSource;
-    String filePath;
-    String sensorName;
-    long timeMin = -1;
-    long timeMax = -1;
-    float lastResult = 0;
+    private String filePath;
+    private String sensorName;
+    private long minTime = -1;
+    private long maxTime = -1;
+    private float lastResult = 0;
 
     public FileLoader() {
         dataSource = new ArrayList<>();
@@ -39,15 +39,19 @@ public class FileLoader extends Behavior<Float> {
         }
     }
 
-    public FileLoader(String filePath, String sensorName, int timeMin, int timeMax) {
+    public FileLoader(String filePath, String sensorName, int minTime, int maxTime) {
         dataSource = new ArrayList<>();
         this.filePath = filePath;
         this.sensorName = sensorName;
-        this.timeMax = timeMax;
-        this.timeMin = timeMin;
+        this.maxTime = maxTime;
+        this.minTime = minTime;
         if (filePath != null) {
             getFile();
         }
+    }
+
+    public void setPath(String filePath){
+        this.filePath = filePath;
     }
 
     public void setSensorName(String sensorName){
@@ -55,8 +59,8 @@ public class FileLoader extends Behavior<Float> {
     }
 
     public void setTimeMinMax(long min, long max){
-        this.timeMin = min;
-        this.timeMax = max;
+        this.minTime = min;
+        this.maxTime = max;
     }
 
     private void getFile() {
@@ -69,11 +73,11 @@ public class FileLoader extends Behavior<Float> {
         } else if (mjson.find()) {
             getdataJSON();
         } else {
-            throw new IllegalArgumentException("Le fichier passe en parametre est inconnu.");
+            throw new IllegalArgumentException("File: " + filePath + " not found.");
         }
 
         if (getDataSource().isEmpty()) {
-            throw new IllegalArgumentException("Il n'y a aucune valeur pour le capteur passe en parametre.");
+            throw new IllegalArgumentException("Could not found value for sensor: " + sensorName);
         }
     }
 
@@ -88,7 +92,7 @@ public class FileLoader extends Behavior<Float> {
                 String sensor = jsonObject.getString("sensorName");
                 if (sensor.equals(sensorName))
                 {
-                    Tuple<Float> t = new Tuple<>(jsonObject.getInt("time"), sensor, (float)jsonObject.getDouble("value"));
+                    Tuple<Float> t = new Tuple<>(jsonObject.getInt("time"), sensor, jsonObject.getString("placeName"), (float)jsonObject.getDouble("value"));
                     getDataSource().add(t);
                 }
             }
@@ -127,9 +131,10 @@ public class FileLoader extends Behavior<Float> {
                 tuple = line.split(",");
                 int time = Integer.parseInt(tuple[0]);
                 String sensor = tuple[1];
-                float value = Float.parseFloat(tuple[2]);
-                if (sensor.equals(sensorName) && timeMin >= 0 && timeMax > 0 && time >= timeMin && time <= timeMax) {
-                    Tuple<Float> t = new Tuple<>(time, sensor, value);
+                String placeName = tuple[2];
+                float value = Float.parseFloat(tuple[3]);
+                if (sensor.equals(sensorName) && minTime >= 0 && maxTime > 0 && time >= minTime && time <= maxTime) {
+                    Tuple<Float> t = new Tuple<>(time, sensor, placeName, value);
                     getDataSource().add(t);
                 }
             }
@@ -148,27 +153,25 @@ public class FileLoader extends Behavior<Float> {
 
     /**
      *
-     * @param relativeTime Valeur du temps a chercher dans le CSV
-     * @param noise Borne maximale a ajouter/soustraire du resultatpour créer un
-     * bruit.
-     * @return Si le CSV contient la valeur pour le temps et le sensor demandé
-     * alors retourne la valeur. Si le temps indiqué est entre 2 temps dans le
-     * csv pour ce sensor alors retourne la moyenne entre le temps inférieure et
-     * le temps supérieure au temps demandé. Si le temps demandé est inférieur a
-     * tous les temps dans le csv alors retourne Nan.
+     * @param relativeTime Time value to look for in CSV data source.
+     * @param noise  Pseudo random value to add/substract to created data to simulate noise.
+     * @return If CSV data source contains value for the asked sensor with at the exact same time
+     * then return value.
+     * If time specified is between two times with known value then return mean of those values.
+     * If time range below all known time return NaN
      */
     @Override
     public Float createData(float relativeTime, float noise) {
         float result = 0;
-        boolean valeurTrouve = false;
+        boolean isValueFound = false;
         for (Tuple d : getDataSource()) {
             if (d.getTime() == relativeTime) {
                 result = (float) d.getValue();
-                valeurTrouve = true;
+                isValueFound = true;
             }
         }
         //Si le point n'est pas dans la liste calcul la valeur moyenne entre la valeur precedente et la prochaine valeur
-        if (valeurTrouve == false) {
+        if (!isValueFound) {
             Tuple<Float> min = null, max = null;
             float valueBefore = Float.MAX_VALUE, valueAfter = Float.MAX_VALUE;
             for (Tuple d : getDataSource()) {
