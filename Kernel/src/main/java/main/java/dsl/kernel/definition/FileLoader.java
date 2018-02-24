@@ -64,10 +64,10 @@ public class FileLoader extends Behavior<Float> {
     }
 
     private void getFile() {
-        Pattern csv = Pattern.compile(".*.csv"); 
-        Pattern json = Pattern.compile(".*.json"); 
-        Matcher mcsv = csv.matcher(filePath) ;
-        Matcher mjson = json.matcher(filePath) ;
+        Pattern csv = Pattern.compile(".*.csv");
+        Pattern json = Pattern.compile(".*.json");
+        Matcher mcsv = csv.matcher(filePath);
+        Matcher mjson = json.matcher(filePath);
         if (mcsv.find()) {
             getDataCSV();
         } else if (mjson.find()) {
