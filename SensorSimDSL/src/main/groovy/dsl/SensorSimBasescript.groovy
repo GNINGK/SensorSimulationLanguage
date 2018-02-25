@@ -1,61 +1,77 @@
 package main.groovy.dsl
 
-import main.java.dsl.kernel.definition.Behavior
-import main.java.dsl.kernel.definition.FileLoader
-import main.java.dsl.kernel.definition.Functions
-import main.java.dsl.kernel.definition.Interval
-import main.java.dsl.kernel.definition.IntervalFunctions
-import main.java.dsl.kernel.definition.Markov
-import main.java.dsl.kernel.definition.Polynomial
+import main.groovy.utils.FunctionType
+import main.java.dsl.kernel.definition.*
+import main.java.dsl.kernel.structure.Place
 import main.java.dsl.kernel.structure.Sensor
+import org.apache.log4j.Logger
 
-abstract class SensorSimBasescript extends Script  {
+abstract class SensorSimBaseScript extends Script  {
 
-    // simulation "name"
+    private static Logger logger = Logger.getLogger(SensorSimBaseScript.class)
+
+    // simulation "name" lasting time
     def simulation(String name) {
-        [lasting: { n -> ((SensorSimBinding)this.getBinding()).getSensorSimModel().createSimulation(name, n) }]
+        [lasting: { time ->
+            int  duration = time
+            ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSimulation(name, duration) }]
     }
 
-    // instantiate "name" means we create a place name "name" [and one more place.]*n
+    // instantiate "name" means we create a place named "name" [and one more place named "place]*n
     def instantiate(String name) {
         ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace(name)
         def closure
         closure = { place ->
-            ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace((String) place)
+            String placeValue = place
+            ((SensorSimBinding) this.getBinding()).getSensorSimModel().createPlace(placeValue)
         }
         [and: closure]
     }
 
+    // create a law named "name" of type "type" other options depend of the type of law
     def law(String name) {
         [function: { type ->
-            if(((String) type).equals("polynome")) {
-                [between: { a->
+            FunctionType functionType
+            try {
+                functionType = FunctionType.valueOf(((String) type).toUpperCase())
+            } catch (IllegalArgumentException iae) {
+                functionType = FunctionType.UNKNOWN
+            }
+
+            ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw(name, functionType)
+
+            if (functionType == FunctionType.POLYNOMIAL) {
+                [between: { a ->
                     [and: { b ->
-                        ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
-                        ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).setMinMax((double) a, (double) b);
+                        double minTime = a
+                        double maxTime = b
+                        ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).setMinMax(minTime, maxTime)
                         def closure
                         closure = { coefficient ->
-                            //System.out.print("test: " + (double) coefficient)
-                            ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).addCoefficient((double) coefficient);
+                            double coefficientValue = coefficient
+                            ((Polynomial) ((SensorSimBinding) this.getBinding()).getVariable(name)).addCoefficient(coefficientValue)
                             [and: closure]
                         }
                         [with: closure]
                     }]
                 }]
-            } else if (((String) type).equals("interval")) {
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+            } else if (functionType == FunctionType.INTERVAL) {
                 def closure
                 closure = { lawName ->
                     [from: { a ->
                         [to: { b ->
-                            ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(new Interval(a, b), ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)))
+                            double minTime = a
+                            double maxTime = b
+                            Interval interval = new Interval(minTime, maxTime)
+                            Functions function = (lawName instanceof String) ?
+                                    ((Functions) ((SensorSimBinding) this.getBinding()).getVariable(lawName)) : (Functions) lawName
+                            ((IntervalFunctions) ((SensorSimBinding) this.getBinding()).getVariable(name)).add(interval, function)
                             [and: closure]
                         }]
                     }]
                 }
                 [follows: closure]
-            } else if (((String) type).equals("markov")) {
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+            } else if (functionType == FunctionType.MARKOV) {
                 [frequency: { freq ->
                     ((Markov) ((SensorSimBinding) this.getBinding()).getVariable(name)).setFrequency((int) freq)
                     def closure
@@ -69,16 +85,19 @@ abstract class SensorSimBasescript extends Script  {
                     }
                     [with: closure]
                 }]
-            } else if (((String) type).equals("csv")) {
-            ////from "dataSource.csv" with "sensor0" between 0 and 10
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createLaw((String) name, (String) type)
+            } else if (functionType == FunctionType.CSV || functionType == FunctionType.JSON) {
+                ////from "dataSource.csv" with "sensor0" between 0 and 10
                 [from: { source ->
                     [with: { sensorName ->
-                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath((String) source)
-                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName((String) sensorName)
+                        String sourceValue = source
+                        String sensorNameValue = sensorName
+                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
+                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName(sensorNameValue)
                         [between: { a ->
                             [and: { b ->
-                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setTimeMinMax((long) a, (long) b)
+                                int minTime = a
+                                int maxTime = b
+                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setTimeMinMax(minTime, maxTime)
                             }]
                         }]
                     }]
@@ -88,25 +107,34 @@ abstract class SensorSimBasescript extends Script  {
         }]
     }
 
-    // place "name" means actuator becomes signal [and actuator becomes signal]*n
+    // Create a sensor named "name" following law "lawName" at frequency "frequency"
     def sensor(String name) {
         [follows: { lawName ->
             [every: { frequency ->
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, ((Behavior) ((SensorSimBinding) this.getBinding()).getVariable((String) lawName)), (int) frequency)}
-            ]
-        }]
-    }
-        // place "name" means actuator becomes signal [and actuator becomes signal]*n
-    def add(int nbSensors) {
-        [sensors: { name ->
-            [to: { placeName ->
-                ((SensorSimBinding) this.getBinding()).getSensorSimModel().addSensors(placeName, ((Sensor) ((SensorSimBinding) this.getBinding()).getVariable(name)), nbSensors)
+                int frequencyValue = frequency
+                Behavior law = (lawName instanceof String) ?
+                        ((Behavior) ((SensorSimBinding) this.getBinding()).getVariable((String) lawName)) : (Behavior) lawName
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().createSensor(name, law, frequencyValue)
             }]
         }]
     }
 
+    // Add "nbSensors" of type "type" to place "placeName"
+    def add(int nbSensors) {
+        [sensors: { sensorType ->
+            [to: { placeName ->
+                Place place = (placeName instanceof String)?
+                        ((Place) ((SensorSimBinding) this.getBinding()).getVariable(placeName)) : (Place) placeName
+                Sensor sensor = (sensorType instanceof String)?
+                        ((Sensor) ((SensorSimBinding) this.getBinding()).getVariable(sensorType)) : (Sensor) sensorType
+                ((SensorSimBinding) this.getBinding()).getSensorSimModel().addSensors(place, sensor, nbSensors)
+            }]
+        }]
+    }
+
+    // Run simulation
     def launch(String simulationName) {
-        ((SensorSimBinding) this.getBinding()).getSensorSimModel().runSimulation()
+        ((SensorSimBinding)this.getBinding()).getSensorSimModel().runSimulation()
     }
 
     // disable run method while running
@@ -115,7 +143,11 @@ abstract class SensorSimBasescript extends Script  {
     def run() {
         if(count == 0) {
             count++
-            scriptBody()
+            try{
+                scriptBody()
+            } catch (Exception e){
+                logger.error("Simulation stop !")
+            }
         } else {
             println "Run method is disabled"
         }

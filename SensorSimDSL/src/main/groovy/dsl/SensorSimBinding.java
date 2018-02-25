@@ -4,11 +4,13 @@ import java.util.Map;
 
 import groovy.lang.Binding;
 import groovy.lang.Script;
+import org.apache.log4j.Logger;
 
 public class SensorSimBinding extends Binding {
     private Script script;
 
     private SensorSimModel model;
+    private static Logger logger = Logger.getLogger(SensorSimModel.class);
 
     public SensorSimBinding() {
         super();
@@ -33,7 +35,12 @@ public class SensorSimBinding extends Binding {
     }
 
     public Object getVariable(String name) {
-        return super.getVariable(name);
+        try {
+            return super.getVariable(name);
+        } catch (Exception e){
+            logger.warn("Variable: " + name + " not found !");
+            return null;
+        }
     }
 
     public void setVariable(String name, Object value) {

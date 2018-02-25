@@ -78,9 +78,9 @@ public class Place<T> implements NamedElement {
         List<Tuple> result = new ArrayList<>();
         for (int i = 0; i < this.getTotalTime(); i++) {
             for (Sensor s : sensors) {
-                if (i % s.getEchantillonnage() == 0) {
+                if (i % s.getSampling() == 0) {
                     long t = System.currentTimeMillis() - this.getTotalTime() * 1000 + i * 1000;
-                    result.add(new Tuple(t, s.getName(), s.generationDonnees(i)));
+                    result.add(new Tuple(t, s.getName(), this.name, s.generateData(i)));
                 }
             }
         }
@@ -92,14 +92,14 @@ public class Place<T> implements NamedElement {
         for (int i = 0; i < this.getTotalTime(); i++) {
             List<Tuple> listTemp = new ArrayList<>();
             for (Sensor s : sensors) {
-                if (i % s.getEchantillonnage() == 0) {
+                if (i % s.getSampling() == 0) {
 
-                    listTemp.add(new Tuple(i, s.getName(), s.generationDonnees(i)));
+                    listTemp.add(new Tuple(i, s.getName(), this.name, s.generateData(i)));
                 }
 
             }
             long t = System.currentTimeMillis() - this.getTotalTime() * 1000 + i * 1000;
-            result.add(new Tuple(t, "compositeSensor" + getName(), aggregLaw.aggregate(listTemp)));
+            result.add(new Tuple(t, "compositeSensor" + getName(), this.name, aggregLaw.aggregate(listTemp)));
         }
         return result;
     }

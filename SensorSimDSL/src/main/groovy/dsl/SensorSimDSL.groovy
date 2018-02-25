@@ -8,14 +8,14 @@ class SensorSimDSL {
     private GroovyShell shell
     private CompilerConfiguration configuration
     private SensorSimBinding binding
-    private SensorSimBasescript basescript
+    private SensorSimBaseScript baseScript
 
 
     SensorSimDSL() {
         binding = new SensorSimBinding()
         binding.setSensorSimModel(new SensorSimModel(binding))
         configuration = getDSLConfiguration()
-        configuration.setScriptBaseClass("main.groovy.dsl.SensorSimBasescript")
+        configuration.setScriptBaseClass("main.groovy.dsl.SensorSimBaseScript")
         shell = new GroovyShell(configuration)
     }
 

@@ -53,15 +53,14 @@ public class Test {
         Simulation simulation = new Simulation(30);
 
         //batA.addSensor(new Sensor<>("sensor_markov", function_markov, 1));
-        batA.addSensor(new Sensor("sensor0", jsonLoader, 1));
-        batA.addSensor(new Sensor("sensor1", csvLoader, 1));
-        batA.addSensor(new Sensor("sensor2", function3, 1));
+        //batA.addSensor(new Sensor("sensor0", jsonLoader, 1));
+        //batA.addSensor(new Sensor("sensor1", csvLoader, 1));
+        //batA.addSensor(new Sensor("sensor2", function3, 1));
         //batA.addSensor(new Sensor("sensor2", function2, 1));
-        batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
+        //batA.addSensor(new Sensor("sensor_interval", function_interval, 1));
 
 
         //Sensor normal
-        Place batA = new Place();
         Sensor s = new Sensor("sensor1", csvLoader, 1);
         Sensor s2 = new Sensor("sensor2", jsonLoader, 1);
         batA.addSensor(s);
