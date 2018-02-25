@@ -83,6 +83,11 @@ public class SensorSimModel {
     }
 
     public void addSensors(Place place, Sensor sensor, int sensorNb) {
+        if (place == null){
+            logger.warn("Place specified is not defined thus sensor can't be added !");
+            return;
+        }
+
         if(sensor == null){
             logger.warn("Sensor was not found thus sensor won't be added to place: " + place.getName() + " !");
             return;

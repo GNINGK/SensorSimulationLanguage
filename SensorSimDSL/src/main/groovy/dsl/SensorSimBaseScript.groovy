@@ -86,7 +86,6 @@ abstract class SensorSimBaseScript extends Script  {
                     [with: closure]
                 }]
             } else if (functionType == FunctionType.CSV || functionType == FunctionType.JSON) {
-                ////from "dataSource.csv" with "sensor0" between 0 and 10
                 [from: { source ->
                     [with: { sensorName ->
                         String sourceValue = source

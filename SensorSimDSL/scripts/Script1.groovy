@@ -16,7 +16,7 @@ sensor "sensor_interval" follows "function_interval" every 1
 sensor "sensor_csv" follows "function_csv" every 1
 sensor "sensor_markov" follows "function_markov" every 1
 
-add 1 sensors sensor1 to buildingA
+add 1 sensors sensor1 to building
 add 1 sensors "sensor2" to "buildingA"
 add 1 sensors "sensor_interval" to "buildingB"
 add 1 sensors "sensor_csv" to "buildingB"
