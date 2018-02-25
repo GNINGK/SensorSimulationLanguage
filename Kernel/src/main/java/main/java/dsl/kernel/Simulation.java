@@ -95,21 +95,14 @@ public class Simulation implements NamedElement {
     }
 
     public void run() {
-        for (Place place : this.places) {
-            List<Sensor> sensors = place.getSensors();
-            String placeName = place.getName();
-            for (Sensor sensor : sensors) {
-                for (int i = 0; i < this.totalTime; i++) {
-                    if (i % sensor.getSampling() == 0) {
-                        long time = System.currentTimeMillis() - this.totalTime * 1000 + i * 1000;
-                        Object data = sensor.generateData(i);
-                        if ( (data instanceof Float && !Float.isNaN((float) data)) || data instanceof String) {
-                            System.out.println("Sensor: " + sensor.getName() + ", at place: " + placeName +
-                                    ", time: " + i + ", value: " + sensor.generateData(i));
-                            saveToDB(new Tuple(time, sensor.getName(), placeName, data));
-                        }
-                    }
-                }
+        for (Place l : this.places) {
+            if (l.getTotalTime() != this.totalTime) {
+                l.setTotalTime(totalTime);
+            }
+            List<Tuple> result = l.getDatasSensor();
+            for (Tuple t : result) {
+                System.out.println("Sensor:" + t.getSensor() + "; time:" + t.getTime() + "; value:" + t.getValue());
+                //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
             }
         }
     }
@@ -150,7 +143,7 @@ public class Simulation implements NamedElement {
 
     private void saveToDB(Tuple tuple) {
         Object value = tuple.getValue();
-        if(value instanceof String ) {
+        if (value instanceof String) {
             influxDB.write(Point.measurement(tuple.getPlaceName() + "_infos")
                     .time(tuple.getTime(), TimeUnit.MILLISECONDS)
                     .addField("info", (String) value)
