@@ -144,12 +144,12 @@ public class Simulation implements NamedElement {
     private void saveToDB(Tuple tuple) {
         Object value = tuple.getValue();
         if (value instanceof String) {
-            influxDB.write(Point.measurement(tuple.getPlaceName() + "_infos")
+            influxDB.write(Point.measurement(tuple.getSensor() + "_infos")
                     .time(tuple.getTime(), TimeUnit.MILLISECONDS)
                     .addField("info", (String) value)
                     .build());
         } else {
-            influxDB.write(Point.measurement(tuple.getPlaceName() + "_datas")
+            influxDB.write(Point.measurement(tuple.getSensor() + "_datas")
                     .time(tuple.getTime(), TimeUnit.MILLISECONDS)
                     .addField("value", (float) value)
                     .build());
