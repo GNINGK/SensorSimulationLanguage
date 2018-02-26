@@ -102,7 +102,7 @@ public class Simulation implements NamedElement {
             List<Tuple> result = l.getDatasSensor();
             for (Tuple t : result) {
                 System.out.println("Sensor:" + t.getSensor() + "; time:" + t.getTime() + "; value:" + t.getValue());
-                //saveToDB(new Tuple(t, sensor.getName(), sensor.generationDonnees(i)));
+                saveToDB(t);
             }
         }
     }
