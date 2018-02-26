@@ -88,21 +88,20 @@ abstract class SensorSimBaseScript extends Script  {
             } else if (functionType == FunctionType.CSV || functionType == FunctionType.JSON) {
                 [from: { source ->
                     [with: { sensorName ->
-                        String sourceValue = source
-                        String sensorNameValue = sensorName
-                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
-                        ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName(sensorNameValue)
                         [between: { a ->
                             [and: { b ->
                                 int minTime = a
                                 int maxTime = b
                                 ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setTimeMinMax(minTime, maxTime)
+                                String sourceValue = source
+                                String sensorNameValue = sensorName
+                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName(sensorNameValue)
+                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
                             }]
                         }]
                     }]
                 }]
             }
-
         }]
     }
 
@@ -131,6 +130,21 @@ abstract class SensorSimBaseScript extends Script  {
         }]
     }
 
+    // Aggregate place "placeName"
+    def aggregate(Object placeName) {
+        [with: { lawName ->
+            Place place = (placeName instanceof String) ?
+                    ((Place) ((SensorSimBinding) this.getBinding()).getVariable(placeName)) : (Place) placeName
+            AggregatingLaw law = (lawName instanceof String) ?
+                    ((AggregatingLaw) ((SensorSimBinding) this.getBinding()).getVariable((String) lawName)) : (AggregatingLaw) lawName
+
+            if (place != null && law instanceof AggregatingLaw)
+                place.setAggregLaw(law)
+            else
+                logger.warn("Law or Place not defined and/or law not of type AggregatingLaw thus aggregate law can't be defined!")
+        }]
+    }
+
     // Run simulation
     def launch(String simulationName) {
         ((SensorSimBinding)this.getBinding()).getSensorSimModel().runSimulation()
@@ -142,11 +156,11 @@ abstract class SensorSimBaseScript extends Script  {
     def run() {
         if(count == 0) {
             count++
-            try{
+            //try{
                 scriptBody()
-            } catch (Exception e){
+            /*} catch (Exception e){
                 logger.error("Simulation stop !")
-            }
+            }*/
         } else {
             println "Run method is disabled"
         }

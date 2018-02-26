@@ -1,15 +1,11 @@
 package main.java.dsl.kernel.definition;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.*;
+
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +21,8 @@ public class FileLoader extends Behavior<Float> {
     private long minTime = -1;
     private long maxTime = -1;
     private float lastResult = 0;
+    private static final Logger logger = Logger.getLogger(FileLoader.class);
+
 
     public FileLoader() {
         dataSource = new ArrayList<>();
@@ -52,6 +50,7 @@ public class FileLoader extends Behavior<Float> {
 
     public void setPath(String filePath){
         this.filePath = filePath;
+        getFile();
     }
 
     public void setSensorName(String sensorName){
@@ -68,25 +67,31 @@ public class FileLoader extends Behavior<Float> {
         Pattern json = Pattern.compile(".*.json");
         Matcher mcsv = csv.matcher(filePath);
         Matcher mjson = json.matcher(filePath);
-        if (mcsv.find()) {
+
+        if (mcsv.find() && isFileDefined()) {
             getDataCSV();
-        } else if (mjson.find()) {
-            getdataJSON();
+        } else if (mjson.find() && isFileDefined()) {
+            getDataJSON();
         } else {
             throw new IllegalArgumentException("File: " + filePath + " not found.");
         }
 
         if (getDataSource().isEmpty()) {
-            throw new IllegalArgumentException("Could not found value for sensor: " + sensorName);
+            throw new IllegalArgumentException("Could not found value for sensor: " + this.sensorName);
         }
     }
 
-    private void getdataJSON() {
+    private boolean isFileDefined(){
+        File f = new File(this.filePath);
+        return f.exists() && !f.isDirectory();
+    }
+
+    private void getDataJSON() {
 
         File file = new File(filePath);
         if (file.isFile()) {
             JSONArray jsonArray = new JSONArray(loadFile(file));
-            JSONObject jsonObject = null;
+            JSONObject jsonObject;
             for (int j = 0; j < jsonArray.length(); j++) {
                 jsonObject = jsonArray.getJSONObject(j);
                 String sensor = jsonObject.getString("sensorName");
@@ -99,8 +104,8 @@ public class FileLoader extends Behavior<Float> {
         }
     }
 
-    public static String loadFile(File f) {
-        BufferedInputStream in = null;
+    private static String loadFile(File f) {
+        BufferedInputStream in;
         StringWriter out = null;
         try {
             in = new BufferedInputStream(new FileInputStream(f));
@@ -121,9 +126,8 @@ public class FileLoader extends Behavior<Float> {
 
     private void getDataCSV() {
         BufferedReader buffer = null;
-        String[] tuple = null;
+        String[] tuple;
         try {
-            String filePath = new File("").getAbsolutePath();
             buffer = new BufferedReader(new FileReader(this.filePath));
 
             String line;

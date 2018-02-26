@@ -45,6 +45,9 @@ public class SensorSimModel {
 
         if(type == FunctionType.UNKNOWN){
             logger.error("Function type unknown thus law: " + name + " will not be defined !");
+        } else if(type == FunctionType.AGGREGATE){
+            this.binding.setVariable(name, new SumAggregating());
+            return;
         }
 
         switch (type) {

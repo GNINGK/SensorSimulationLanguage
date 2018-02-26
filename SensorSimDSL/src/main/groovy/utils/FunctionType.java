@@ -1,6 +1,7 @@
 package main.groovy.utils;
 
 public enum FunctionType {
+    AGGREGATE("Aggregate"),
     CSV("Csv loading"),
     INTERVAL("Interval"),
     JSON("Json loading"),
