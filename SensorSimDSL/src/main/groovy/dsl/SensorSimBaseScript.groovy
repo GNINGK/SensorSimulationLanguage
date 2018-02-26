@@ -156,11 +156,11 @@ abstract class SensorSimBaseScript extends Script  {
     def run() {
         if(count == 0) {
             count++
-            //try{
+            try{
                 scriptBody()
-            /*} catch (Exception e){
+            } catch (Exception e){
                 logger.error("Simulation stop !")
-            }*/
+            }
         } else {
             println "Run method is disabled"
         }
