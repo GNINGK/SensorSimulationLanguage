@@ -48,7 +48,7 @@ public class Test {
         batA.setName("batA");
         function_markov.setFrequency(5);
 
-        //batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
+        batA.addSensor(new Sensor("sensor_markov", function_markov, 1));
         //Definition de la simulation
         Simulation simulation = new Simulation(30);
 
@@ -61,7 +61,7 @@ public class Test {
 
 
         //Sensor normal
-        Sensor s = new Sensor("sensor1", csvLoader, 1);
+        /*Sensor s = new Sensor("sensor1", csvLoader, 1);
         Sensor s2 = new Sensor("sensor2", jsonLoader, 1);
         batA.addSensor(s);
         batA.addSensor(s2);
@@ -73,9 +73,9 @@ public class Test {
         Sensor s3 = new Sensor("sensor1", csvLoader, 1);
         Sensor s4 = new Sensor("sensor2", jsonLoader, 1);
         batB.addSensor(s3);
-        batB.addSensor(s4);
+        batB.addSensor(s4);*/
 
-        simulation.addPlaces(batB);
+        simulation.addPlaces(batA);
 
         simulation.run();
 

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Maxime
  */
-public class Markov extends Behavior<String> {
+public class Markov extends Behavior<Float> {
 
     private List<float[]> transitionMatrix;
     private int frequency = 1;
@@ -35,7 +35,7 @@ public class Markov extends Behavior<String> {
     }
 
     @Override
-    public String createData(float relativeTime, float noise) {
+    public Float createData(float relativeTime, float noise) {
         String result = "";
         if (relativeTime % frequency == 0) {
             double r = Math.random();
@@ -50,9 +50,9 @@ public class Markov extends Behavior<String> {
                 }
             }
         } else {
-            return statesName.get(initialState);
+            return (float)statesName.get(initialState).hashCode();
         }
-        return result;
+        return (float)result.hashCode();
     }
 
     /**
