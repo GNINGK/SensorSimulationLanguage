@@ -1,0 +1,4 @@
+[{"time":0,"sensorName":"sensor1","placeName":"batA","value":5.0},
+	{"time":2,"sensorName":"sensor1","placeName":"batA","value":17.0},
+	{"time":4,"sensorName":"sensor1","placeName":"batA","value":29.0}
+]
