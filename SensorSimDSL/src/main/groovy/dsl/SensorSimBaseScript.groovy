@@ -96,7 +96,13 @@ abstract class SensorSimBaseScript extends Script  {
                                 String sourceValue = source
                                 String sensorNameValue = sensorName
                                 ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setSensorName(sensorNameValue)
-                                ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
+                                try{
+                                    ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
+                                } catch (IllegalArgumentException iae){
+                                    logger.warn(iae.getMessage())
+                                    ((SensorSimBinding) this.getBinding()).getSensorSimModel().deleteLaw(name)
+                                    logger.warn("File for law: " + name + " was not found thus law can't be defined !")
+                                }
                             }]
                         }]
                     }]
@@ -156,11 +162,11 @@ abstract class SensorSimBaseScript extends Script  {
     def run() {
         if(count == 0) {
             count++
-            try{
+            //try{
                 scriptBody()
-            } catch (Exception e){
+            /*} catch (Exception e){
                 logger.error("Simulation stop !")
-            }
+            }*/
         } else {
             println "Run method is disabled"
         }

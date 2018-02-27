@@ -69,6 +69,10 @@ public class SensorSimModel {
         this.binding.setVariable(name, law);
     }
 
+    public void deleteLaw(String name){
+        this.binding.setVariable(name, null);
+    }
+
     public void createSensor(String sensorName, Behavior behavior, int samples) {
         if(behavior == null){
             logger.warn("Specified law for: " + sensorName + " not found thus sensor was not created !");
