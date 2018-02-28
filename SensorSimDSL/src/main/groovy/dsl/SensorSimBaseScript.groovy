@@ -99,9 +99,7 @@ abstract class SensorSimBaseScript extends Script  {
                                 try{
                                     ((FileLoader) ((SensorSimBinding) this.getBinding()).getVariable(name)).setPath(sourceValue)
                                 } catch (IllegalArgumentException iae){
-                                    logger.warn(iae.getMessage())
                                     ((SensorSimBinding) this.getBinding()).getSensorSimModel().deleteLaw(name)
-                                    logger.warn("File for law: " + name + " was not found thus law can't be defined !")
                                 }
                             }]
                         }]

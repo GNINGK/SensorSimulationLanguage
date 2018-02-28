@@ -73,10 +73,12 @@ public class FileLoader extends Behavior<Float> {
         } else if (mjson.find() && isFileDefined()) {
             getDataJSON();
         } else {
+            logger.warn("File for law was not found thus law can't be defined !");
             throw new IllegalArgumentException("File: " + filePath + " not found.");
         }
 
         if (getDataSource().isEmpty()) {
+            logger.warn("No value for sensor " + sensorName + " was found thus law can't be defined !");
             throw new IllegalArgumentException("Could not found value for sensor: " + this.sensorName);
         }
     }
